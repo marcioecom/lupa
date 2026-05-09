@@ -48,7 +48,7 @@ export async function buildServer(): Promise<FastifyInstance> {
           "alimenta painéis de BI.",
         version: "0.1.0",
       },
-      servers: [{ url: `http://${config.API_HOST}:${config.API_PORT}` }],
+      servers: [{ url: config.API_URL ?? `http://${config.API_HOST}:${config.API_PORT}` }],
       tags: [
         { name: "health", description: "Liveness/readiness" },
         { name: "meta", description: "Metadados de scraping" },
