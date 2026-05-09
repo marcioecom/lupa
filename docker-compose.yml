@@ -1,21 +1,21 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: wagner-etl-postgres
+    container_name: lupa-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: wagner
-      POSTGRES_PASSWORD: wagner
-      POSTGRES_DB: wagner_etl
+      POSTGRES_USER: lupa
+      POSTGRES_PASSWORD: lupa
+      POSTGRES_DB: lupa
     ports:
       - "5433:5432"
     volumes:
-      - wagner_etl_pgdata:/var/lib/postgresql/data
+      - lupa_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U wagner -d wagner_etl"]
+      test: ["CMD-SHELL", "pg_isready -U lupa -d lupa"]
       interval: 5s
       timeout: 3s
       retries: 10
 
 volumes:
-  wagner_etl_pgdata:
+  lupa_pgdata:

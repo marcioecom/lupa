@@ -1,4 +1,4 @@
-# Wagner ETL - SPEC
+# lupa - SPEC
 
 ## Objetivo
 

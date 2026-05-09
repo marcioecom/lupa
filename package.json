@@ -1,5 +1,5 @@
 {
-  "name": "wagner-etl",
+  "name": "lupa",
   "version": "0.1.0",
   "private": true,
   "description": "ETL + API for TCE-TO transparency portal (licitacoes, contratos, obras)",
