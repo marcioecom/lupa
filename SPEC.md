@@ -67,7 +67,12 @@ A fase de DB usa `INSERT ... ON CONFLICT (external_id) DO UPDATE` em chunks (CHU
 
 Os fetches HTTP de detalhe sao paralelizados via worker pool (`pMap`) com `SCRAPER_CONCURRENCY=4` por padrao. Sem `delay` interno - a concorrencia limitada controla a taxa.
 
+**Numeros medidos** (2026-05-09, 670 licitacoes, banco local em Docker):
+- Carga limpa (insert do zero): **2:33min** (vs ~12min na implementacao serial anterior, ~4.7x mais rapido).
+- Re-execucao idempotente: **2:33min** tambem - o tempo e dominado pelos 670 fetches HTTP de detalhe; o DB e quase instantaneo (670 unchanged em uma unica query).
+
 ## TODOs conhecidos
+- **Re-execucao mais rapida**: hoje a 2a rodada continua baixando todos os detalhes mesmo quando nada mudou. Otimizacao: armazenar um `list_hash` separado (so dos campos da listagem), comparar antes do fetch e pular detalhe quando casa. Reduziria re-execucao para ~10-15s.
 - Busca full-text sem acento no Postgres (carrega extensao `unaccent` ou ajusta dicionario). Hoje so casa com acento ("manutenção" sim, "manutencao" nao).
 - Scraper de contratos (proxima iteracao).
 - Scraper de obras (proxima iteracao).
