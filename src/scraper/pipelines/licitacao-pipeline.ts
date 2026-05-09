@@ -139,13 +139,31 @@ async function fetchAllDetails(
   if (options.skipDetails) {
     return items.map((list) => ({ list, detail: null }));
   }
+  return pMap(items, config.SCRAPER_CONCURRENCY, async (list) => ({
+    list,
+    detail: await fetchOneDetail(list),
+  }));
+}
 
-  const enriched: EnrichedItem[] = [];
-  for (const item of items) {
-    enriched.push({ list: item, detail: await fetchOneDetail(item) });
-    if (config.SCRAPER_REQUEST_DELAY_MS > 0) await delay(config.SCRAPER_REQUEST_DELAY_MS);
-  }
-  return enriched;
+async function pMap<T, R>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T, index: number) => Promise<R>,
+): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let cursor = 0;
+  const workers = Array.from(
+    { length: Math.max(1, Math.min(concurrency, items.length)) },
+    async () => {
+      while (true) {
+        const i = cursor++;
+        if (i >= items.length) return;
+        results[i] = await fn(items[i], i);
+      }
+    },
+  );
+  await Promise.all(workers);
+  return results;
 }
 
 async function fetchOneDetail(item: LicitacaoListItem): Promise<LicitacaoDetail | null> {
