@@ -1,6 +1,7 @@
 import Fastify, { type FastifyInstance } from "fastify";
 import { config } from "../config";
 import { closeDb, getDb } from "../db/client";
+import { contratosRoutes } from "./routes/contratos";
 import { healthRoutes } from "./routes/health";
 import { licitacoesRoutes } from "./routes/licitacoes";
 import { metaRoutes } from "./routes/meta";
@@ -22,6 +23,7 @@ export async function buildServer(): Promise<FastifyInstance> {
   await app.register(healthRoutes);
   await app.register(metaRoutes, { prefix: "/api/meta" });
   await app.register(licitacoesRoutes, { prefix: "/api/licitacoes" });
+  await app.register(contratosRoutes, { prefix: "/api/contratos" });
 
   return app;
 }
