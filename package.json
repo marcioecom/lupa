@@ -16,6 +16,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "scrape:licitacao": "tsx src/cli/scrape-licitacao.ts",
+    "scrape:contrato": "tsx src/cli/scrape-contrato.ts",
     "api": "tsx src/cli/serve.ts",
     "api:dev": "tsx watch src/cli/serve.ts"
   },

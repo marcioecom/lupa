@@ -6,13 +6,13 @@ import { type Db, getDb, schema } from "../../db/client";
 import { chunkArray, pMap } from "../concurrency";
 import { fetchHtml } from "../http-client";
 import { contentHash } from "../parsers/common";
-import { parseLicitacaoDetail, type LicitacaoDetail } from "../parsers/licitacao-detail";
+import { parseContratoDetail, type ContratoDetail } from "../parsers/contrato-detail";
 import {
-  parseLicitacaoList,
-  type LicitacaoListItem,
-  type LicitacaoListPage,
-  type PaginationForm,
-} from "../parsers/licitacao-list";
+  parseContratoList,
+  type ContratoListItem,
+  type ContratoListPage,
+} from "../parsers/contrato-list";
+import type { PaginationForm } from "../parsers/portal-helpers";
 
 const logger = pino({
   level: config.LOG_LEVEL,
@@ -20,6 +20,7 @@ const logger = pino({
 });
 
 const CHUNK_SIZE = 500;
+const LIST_URL_PATH = "/contrato/Index";
 
 export type RunOptions = {
   limit?: number;
@@ -41,20 +42,18 @@ export type RunSummary = {
 };
 
 type EnrichedItem = {
-  list: LicitacaoListItem;
-  detail: LicitacaoDetail | null;
+  list: ContratoListItem;
+  detail: ContratoDetail | null;
 };
 
 type CollectedList = {
-  items: LicitacaoListItem[];
+  items: ContratoListItem[];
   pagesScraped: number;
   recordsSeen: number;
-  firstPage: LicitacaoListPage | null;
+  firstPage: ContratoListPage | null;
 };
 
-const LIST_URL_PATH = "/licitacao";
-
-export async function runLicitacaoPipeline(options: RunOptions = {}): Promise<RunSummary> {
+export async function runContratoPipeline(options: RunOptions = {}): Promise<RunSummary> {
   const db = getDb();
   const run = await startRun(db);
 
@@ -87,8 +86,8 @@ async function collectListItems(options: RunOptions): Promise<CollectedList> {
   const pageFrom = options.pageFrom ?? 1;
   const pageTo = options.pageTo ?? Number.MAX_SAFE_INTEGER;
 
-  const items: LicitacaoListItem[] = [];
-  let firstPage: LicitacaoListPage | null = null;
+  const items: ContratoListItem[] = [];
+  let firstPage: ContratoListPage | null = null;
   let pagesScraped = 0;
   let recordsSeen = 0;
 
@@ -96,7 +95,7 @@ async function collectListItems(options: RunOptions): Promise<CollectedList> {
   let lastKnownPage = pageTo === Number.MAX_SAFE_INTEGER ? Infinity : pageTo;
 
   while (currentPage <= lastKnownPage) {
-    const page: LicitacaoListPage =
+    const page: ContratoListPage =
       currentPage === pageFrom && pageFrom === 1
         ? await fetchListFirstPage(baseUrl)
         : await fetchListByPage(baseUrl, currentPage, firstPage?.paginationForm ?? null);
@@ -110,7 +109,7 @@ async function collectListItems(options: RunOptions): Promise<CollectedList> {
 
     logger.info(
       { page: currentPage, items: page.items.length, lastPage: page.totalPages },
-      "scraped list page",
+      "scraped contrato list page",
     );
 
     if (options.limit && items.length >= options.limit) break;
@@ -137,7 +136,7 @@ async function persistListPhase(db: Db, runId: number, collected: CollectedList)
 }
 
 async function fetchAllDetails(
-  items: LicitacaoListItem[],
+  items: ContratoListItem[],
   options: RunOptions,
 ): Promise<EnrichedItem[]> {
   if (options.skipDetails) {
@@ -149,13 +148,13 @@ async function fetchAllDetails(
   }));
 }
 
-async function fetchOneDetail(item: LicitacaoListItem): Promise<LicitacaoDetail | null> {
+async function fetchOneDetail(item: ContratoListItem): Promise<ContratoDetail | null> {
   try {
     const response = await fetchHtml(item.detailUrl);
-    return parseLicitacaoDetail(response.body, config.SCRAPER_BASE_URL);
+    return parseContratoDetail(response.body, config.SCRAPER_BASE_URL);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    logger.warn({ url: item.detailUrl, err: message }, "failed to fetch/parse detail");
+    logger.warn({ url: item.detailUrl, err: message }, "failed to fetch/parse contrato detail");
     return null;
   }
 }
@@ -207,12 +206,12 @@ async function applyToDb(
 
   const existingRows = await db
     .select({
-      id: schema.licitacoes.id,
-      externalId: schema.licitacoes.externalId,
-      contentHash: schema.licitacoes.contentHash,
+      id: schema.contratos.id,
+      externalId: schema.contratos.externalId,
+      contentHash: schema.contratos.contentHash,
     })
-    .from(schema.licitacoes)
-    .where(inArray(schema.licitacoes.externalId, prepared.map((p) => p.merged.externalId)));
+    .from(schema.contratos)
+    .where(inArray(schema.contratos.externalId, prepared.map((p) => p.merged.externalId)));
 
   const existingMap = new Map(existingRows.map((r) => [r.externalId, r]));
   const toInsert: Prepared[] = [];
@@ -229,10 +228,10 @@ async function applyToDb(
   await db.transaction(async (tx) => {
     if (toUnchanged.length > 0) {
       await tx
-        .update(schema.licitacoes)
+        .update(schema.contratos)
         .set({ lastSeenAt: new Date(), sourceLastUpdate: ctx.sourceLastUpdate })
         .where(inArray(
-          schema.licitacoes.externalId,
+          schema.contratos.externalId,
           toUnchanged.map((u) => u.merged.externalId),
         ));
     }
@@ -240,7 +239,7 @@ async function applyToDb(
     const writes = [...toInsert, ...toUpdate];
     if (writes.length === 0) return;
 
-    const idMap = await bulkUpsertLicitacoes(tx, writes, ctx.sourceLastUpdate);
+    const idMap = await bulkUpsertContratos(tx, writes, ctx.sourceLastUpdate);
     await replaceAllChildren(tx, writes, idMap);
   });
 
@@ -252,7 +251,7 @@ async function applyToDb(
   return summary;
 }
 
-async function bulkUpsertLicitacoes(
+async function bulkUpsertContratos(
   tx: Parameters<Parameters<Db["transaction"]>[0]>[0],
   writes: Prepared[],
   sourceLastUpdate: string | null,
@@ -266,34 +265,36 @@ async function bulkUpsertLicitacoes(
   const idMap = new Map<string, number>();
   for (const chunk of chunkArray(rows, CHUNK_SIZE)) {
     const result = await tx
-      .insert(schema.licitacoes)
+      .insert(schema.contratos)
       .values(chunk)
       .onConflictDoUpdate({
-        target: schema.licitacoes.externalId,
+        target: schema.contratos.externalId,
         set: {
           numero: sql`excluded.numero`,
           ano: sql`excluded.ano`,
           numeroSequencial: sql`excluded.numero_sequencial`,
           modalidade: sql`excluded.modalidade`,
-          descricao: sql`excluded.descricao`,
+          finalidade: sql`excluded.finalidade`,
+          unidadeGestora: sql`excluded.unidade_gestora`,
+          empresaContratada: sql`excluded.empresa_contratada`,
+          cnpjEmpresa: sql`excluded.cnpj_empresa`,
+          fundamentoLegal: sql`excluded.fundamento_legal`,
           objeto: sql`excluded.objeto`,
+          vigenciaInicio: sql`excluded.vigencia_inicio`,
+          vigenciaFim: sql`excluded.vigencia_fim`,
+          valorCentavos: sql`excluded.valor_centavos`,
+          dataPublicacaoExtrato: sql`excluded.data_publicacao_extrato`,
           situacao: sql`excluded.situacao`,
-          dataSessao: sql`excluded.data_sessao`,
-          horaSessao: sql`excluded.hora_sessao`,
-          valorEstimadoCentavos: sql`excluded.valor_estimado_centavos`,
-          numeroProcessoInterno: sql`excluded.numero_processo_interno`,
-          localSessao: sql`excluded.local_sessao`,
-          observacao: sql`excluded.observacao`,
-          dataDisponibilizacao: sql`excluded.data_disponibilizacao`,
+          licitacaoExternalId: sql`excluded.licitacao_external_id`,
           detailUrl: sql`excluded.detail_url`,
-          editalPdfUrl: sql`excluded.edital_pdf_url`,
+          contratoPdfUrl: sql`excluded.contrato_pdf_url`,
           sourceLastUpdate: sql`excluded.source_last_update`,
           contentHash: sql`excluded.content_hash`,
           lastSeenAt: sql`now()`,
           lastChangedAt: sql`now()`,
         },
       })
-      .returning({ id: schema.licitacoes.id, externalId: schema.licitacoes.externalId });
+      .returning({ id: schema.contratos.id, externalId: schema.contratos.externalId });
     for (const r of result) idMap.set(r.externalId, r.id);
   }
   return idMap;
@@ -312,15 +313,17 @@ async function replaceAllChildren(
     .filter((id): id is number => id !== undefined);
   if (affectedIds.length === 0) return;
 
-  await tx.delete(schema.licitacaoDocumentos).where(inArray(schema.licitacaoDocumentos.licitacaoId, affectedIds));
-  await tx.delete(schema.licitacaoEmpresas).where(inArray(schema.licitacaoEmpresas.licitacaoId, affectedIds));
-  await tx.delete(schema.licitacaoPregoeiros).where(inArray(schema.licitacaoPregoeiros.licitacaoId, affectedIds));
-  await tx.delete(schema.licitacaoContratosAtas).where(inArray(schema.licitacaoContratosAtas.licitacaoId, affectedIds));
+  await tx.delete(schema.contratoDocumentos).where(inArray(schema.contratoDocumentos.contratoId, affectedIds));
+  await tx.delete(schema.contratoAditivos).where(inArray(schema.contratoAditivos.contratoId, affectedIds));
+  await tx.delete(schema.contratoApostilamentos).where(inArray(schema.contratoApostilamentos.contratoId, affectedIds));
+  await tx.delete(schema.contratoPagamentos).where(inArray(schema.contratoPagamentos.contratoId, affectedIds));
+  await tx.delete(schema.contratoResponsaveis).where(inArray(schema.contratoResponsaveis.contratoId, affectedIds));
 
-  const docRows: typeof schema.licitacaoDocumentos.$inferInsert[] = [];
-  const empRows: typeof schema.licitacaoEmpresas.$inferInsert[] = [];
-  const preRows: typeof schema.licitacaoPregoeiros.$inferInsert[] = [];
-  const cntRows: typeof schema.licitacaoContratosAtas.$inferInsert[] = [];
+  const docRows: typeof schema.contratoDocumentos.$inferInsert[] = [];
+  const aditRows: typeof schema.contratoAditivos.$inferInsert[] = [];
+  const apostRows: typeof schema.contratoApostilamentos.$inferInsert[] = [];
+  const pagRows: typeof schema.contratoPagamentos.$inferInsert[] = [];
+  const respRows: typeof schema.contratoResponsaveis.$inferInsert[] = [];
 
   for (const p of writesWithDetail) {
     const id = idMap.get(p.merged.externalId);
@@ -331,45 +334,27 @@ async function replaceAllChildren(
       const key = d.numero ?? "";
       if (seenDoc.has(key)) continue;
       seenDoc.add(key);
-      docRows.push({ ...d, licitacaoId: id });
+      docRows.push({ ...d, contratoId: id });
     }
-    for (const e of p.item.detail.empresas) {
-      empRows.push({
-        licitacaoId: id,
-        cnpj: e.cnpj,
-        razaoSocial: e.razaoSocial,
-        situacao: e.situacao,
-        valorPropostaCentavos: e.valorPropostaCentavos,
-        classificacao: e.classificacao,
-        rawData: e.rawData,
-      });
+    for (const a of p.item.detail.aditivos) {
+      aditRows.push({ contratoId: id, ...a });
     }
-    for (const pr of p.item.detail.pregoeiros) {
-      preRows.push({
-        licitacaoId: id,
-        nome: pr.nome,
-        cpf: pr.cpf,
-        funcao: pr.funcao,
-        rawData: pr.rawData,
-      });
+    for (const a of p.item.detail.apostilamentos) {
+      apostRows.push({ contratoId: id, ...a });
     }
-    for (const c of p.item.detail.contratosAtas) {
-      cntRows.push({
-        licitacaoId: id,
-        numero: c.numero,
-        tipo: c.tipo,
-        dataAssinatura: c.dataAssinatura,
-        valorCentavos: c.valorCentavos,
-        documentoUrl: c.documentoUrl,
-        rawData: c.rawData,
-      });
+    for (const pg of p.item.detail.pagamentos) {
+      pagRows.push({ contratoId: id, ...pg });
+    }
+    for (const r of p.item.detail.responsaveis) {
+      respRows.push({ contratoId: id, ...r });
     }
   }
 
-  for (const chunk of chunkArray(docRows, CHUNK_SIZE)) await tx.insert(schema.licitacaoDocumentos).values(chunk);
-  for (const chunk of chunkArray(empRows, CHUNK_SIZE)) await tx.insert(schema.licitacaoEmpresas).values(chunk);
-  for (const chunk of chunkArray(preRows, CHUNK_SIZE)) await tx.insert(schema.licitacaoPregoeiros).values(chunk);
-  for (const chunk of chunkArray(cntRows, CHUNK_SIZE)) await tx.insert(schema.licitacaoContratosAtas).values(chunk);
+  for (const chunk of chunkArray(docRows, CHUNK_SIZE)) await tx.insert(schema.contratoDocumentos).values(chunk);
+  for (const chunk of chunkArray(aditRows, CHUNK_SIZE)) await tx.insert(schema.contratoAditivos).values(chunk);
+  for (const chunk of chunkArray(apostRows, CHUNK_SIZE)) await tx.insert(schema.contratoApostilamentos).values(chunk);
+  for (const chunk of chunkArray(pagRows, CHUNK_SIZE)) await tx.insert(schema.contratoPagamentos).values(chunk);
+  for (const chunk of chunkArray(respRows, CHUNK_SIZE)) await tx.insert(schema.contratoResponsaveis).values(chunk);
 }
 
 async function persistApplyCounts(db: Db, runId: number, summary: RunSummary): Promise<void> {
@@ -384,17 +369,17 @@ async function persistApplyCounts(db: Db, runId: number, summary: RunSummary): P
     .where(eq(schema.scrapingRuns.id, runId));
 }
 
-async function fetchListFirstPage(baseUrl: string): Promise<LicitacaoListPage> {
+async function fetchListFirstPage(baseUrl: string): Promise<ContratoListPage> {
   const url = new URL(LIST_URL_PATH, baseUrl).toString();
   const res = await fetchHtml(url);
-  return parseLicitacaoList(res.body, baseUrl);
+  return parseContratoList(res.body, baseUrl);
 }
 
 async function fetchListByPage(
   baseUrl: string,
   page: number,
   form: PaginationForm | null,
-): Promise<LicitacaoListPage> {
+): Promise<ContratoListPage> {
   if (!form) return fetchListFirstPage(baseUrl);
   const body = new URLSearchParams({
     dadosfilter: form.dadosfilter,
@@ -408,57 +393,60 @@ async function fetchListByPage(
     body,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
-  return parseLicitacaoList(res.body, baseUrl);
+  return parseContratoList(res.body, baseUrl);
 }
 
 function buildHashInput(
   merged: ReturnType<typeof mergeListAndDetail>,
-  detail: LicitacaoDetail | null,
+  detail: ContratoDetail | null,
 ) {
   return {
     ...merged,
-    valorEstimadoCentavos: merged.valorEstimadoCentavos?.toString() ?? null,
+    valorCentavos: merged.valorCentavos?.toString() ?? null,
     documentos: detail?.documentos ?? [],
-    empresas: detail?.empresas?.map(canonicalEmpresa) ?? [],
-    pregoeiros: detail?.pregoeiros ?? [],
-    contratosAtas: detail?.contratosAtas?.map(canonicalContrato) ?? [],
+    aditivos: detail?.aditivos?.map(canonicalAditivo) ?? [],
+    apostilamentos: detail?.apostilamentos ?? [],
+    pagamentos: detail?.pagamentos?.map(canonicalPagamento) ?? [],
+    responsaveis: detail?.responsaveis ?? [],
   };
 }
 
-function mergeListAndDetail(item: LicitacaoListItem, detail: LicitacaoDetail | null) {
+function mergeListAndDetail(item: ContratoListItem, detail: ContratoDetail | null) {
   const header = detail?.header;
   return {
     externalId: item.externalId,
     numero: item.numero,
     ano: item.ano,
     numeroSequencial: item.numeroSequencial,
-    modalidade: header?.modalidadeFromTitle ?? item.modalidade ?? null,
-    descricao: item.rawDescricao,
+    modalidade: header?.modalidade ?? item.modalidade ?? null,
+    finalidade: header?.finalidade ?? item.finalidade ?? null,
+    unidadeGestora: header?.unidadeGestora ?? item.unidadeGestora ?? null,
+    empresaContratada: header?.empresaContratada ?? null,
+    cnpjEmpresa: header?.cnpjEmpresa ?? null,
+    fundamentoLegal: header?.fundamentoLegal ?? null,
     objeto: header?.objeto ?? item.objeto ?? null,
+    vigenciaInicio: header?.vigenciaInicio ?? null,
+    vigenciaFim: header?.vigenciaFim ?? item.vigenciaFim ?? null,
+    valorCentavos: header?.valorCentavos ?? item.valorCentavos,
+    dataPublicacaoExtrato: header?.dataPublicacaoExtrato ?? null,
     situacao: header?.situacao ?? item.situacao ?? null,
-    dataSessao: header?.dataSessao ?? item.dataSessao ?? null,
-    horaSessao: header?.horaSessao ?? item.horaSessao ?? null,
-    valorEstimadoCentavos: item.valorEstimadoCentavos,
-    numeroProcessoInterno: header?.numeroProcessoInterno ?? null,
-    localSessao: header?.localSessao ?? null,
-    observacao: header?.observacao ?? null,
-    dataDisponibilizacao: header?.dataDisponibilizacao ?? null,
+    licitacaoExternalId: header?.licitacaoExternalId ?? null,
     detailUrl: item.detailUrl,
-    editalPdfUrl: header?.editalPdfUrl ?? null,
+    contratoPdfUrl: header?.contratoPdfUrl ?? null,
   };
 }
 
-function canonicalEmpresa(e: LicitacaoDetail["empresas"][number]) {
-  return { ...e, valorPropostaCentavos: e.valorPropostaCentavos?.toString() ?? null };
+function canonicalAditivo(a: ContratoDetail["aditivos"][number]) {
+  return { ...a, valorCentavos: a.valorCentavos?.toString() ?? null };
 }
-function canonicalContrato(c: LicitacaoDetail["contratosAtas"][number]) {
-  return { ...c, valorCentavos: c.valorCentavos?.toString() ?? null };
+function canonicalPagamento(p: ContratoDetail["pagamentos"][number]) {
+  return { ...p, valorCentavos: p.valorCentavos?.toString() ?? null };
 }
 
 async function startRun(db: Db) {
   const [row] = await db
     .insert(schema.scrapingRuns)
-    .values({ module: "licitacao", status: "running" })
+    .values({ module: "contrato", status: "running" })
     .returning({ id: schema.scrapingRuns.id });
   return row;
 }
