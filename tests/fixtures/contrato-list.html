@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="pt">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title> Portal Transparência | Contratos </title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href="https://transparencia.tceto.tc.br/public/bootstrap/css/bootstrap.contraste.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://transparencia.tceto.tc.br/public/css/template-verde.css" type='text/css'/>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://transparencia.tceto.tc.br/public/css/font-awesome/css/font-awesome.min.css" type='text/css'/>
+        <link rel="stylesheet" href="https://transparencia.tceto.tc.br/public/css/comum.css" type='text/css'/>
+        <link rel="stylesheet"  href="https://transparencia.tceto.tc.br/public/flot/flot.css"><link rel="stylesheet"  href="https://transparencia.tceto.tc.br/public/css/bannerProfile.css"><link rel="stylesheet"  href="https://transparencia.tceto.tc.br/public/css/DefaultTab.css"><link rel="stylesheet"  href="https://transparencia.tceto.tc.br/public/css/datepicker.css">        <script src="https://transparencia.tceto.tc.br/public/js/ie-emulation-modes-warning.js"></script>
+        <script src="https://transparencia.tceto.tc.br/public/js/googleAnalytics.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    </head>
+    <body>
+      
+    <div class="layout">
+            <a class="hide" id="topo" href="#accessibility">Ir direto para menu de acessibilidade.</a>
+<noscript>
+  <div class="error minor-font">
+    Seu navegador de internet está sem suporte à JavaScript. Por esse motivo algumas funcionalidades do site podem não estar acessíveis.
+  </div>
+</noscript>
+<!-- fim barra do governo -->
+<header id="portal-siteactions" name="portal-siteactions" class="py-3 top-bar border-bottom shadow-sm">
+  <div class="container">
+    <div class="row accessibility-language-actions-container">
+      <div class="span6 language-and-actions-container">
+        <ul id="portal-siteactions" name="portal-siteactions" class="align-siteactions ps-2">
+          <div>
+            <li>
+              <a href="#inicioConteudo" id="link-navegacao">
+                Ir para o conte&uacute;do <span>[1]</span>
+              </a>
+            </li>
+            <li> <a href="#portal-searchbox-field" id="link-buscar"> Ir para a busca <span>[2]</span> </a> </li>
+            <li> <a href="#inicioFooter" id="link-rodape"> Ir para o rodap&eacute; <span>[3]</span> </a> </li>
+          </div>
+          <!-- separador -->
+          <div class="action-topo">
+            <li> <a accesskey="5" class="align-acess" href="https://transparencia.tceto.tc.br/home/acessibilidade"> <img class="icon-acess" src="https://transparencia.tceto.tc.br/public/images/icon-acessibilidade.png" alt="">Acessibilidade</a> </li>
+            <li> <a accesskey="6" href="#" class="toggle-contraste">Alto Contraste</a> </li>
+            <li> <a accesskey="7" href="#" class="padrao">Padrão</a> </li>
+            <li> <a accesskey="8" href="#" class="aumentar">A+</a> </li>
+            <li> <a accesskey="9" href="#" class="diminuir">A-</a> </li>
+          </div>
+        </ul>
+      </div>
+      <!-- fim div.span6 -->
+    </div>
+
+
+    <div class="d-flex justify-content-between section-topo">
+      <div class="section-logo">
+        <a href="https://transparencia.tceto.tc.br/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
+          <img src="https://transparencia.tceto.tc.br/public/images/icon-tce.png" alt="Logo">
+        </a>
+        <div id="text-logo" class="text-logo">
+          <h1 class="title-logo">PORTAL DA TRANSPARÊNCIA</h1>
+          <span class="description-logo">Tribunal de Contas do Estado do Tocantins</span>
+        </div>
+      </div>
+      <form role="form" action="https://transparencia.tceto.tc.br/busca" method="post" class="content-search col-12 col-lg-auto mb-3 mb-lg-0">
+        <input type='hidden' name='ordem' value='pesq' size='15'>
+        <input type='hidden' name='pagina' value='1' size='15'>
+        <p class="title-search">Buscar</p>
+        <input type="search" id="portal-searchbox-field" name="portal-searchbox-field" class="form-control search-topbar" placeholder="" aria-label="">
+      </form>
+    </div>
+  </div>
+</header>
+<nav class="navbar navbar-expand-lg navbar-light py-2 navbar-color border-bottom">
+  <div class="container d-flex flex-wrap">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="nav me-auto justify-content-center">
+        <li class="nav-item"><a href="https://transparencia.tceto.tc.br/" class="link-menu nav-link link-dark px-2 active" aria-current="page">PÁGINA INICIAL</a></li>
+        <!-- <li class="nav-item"><a href="#" class="link-menu nav-link link-dark px-2">SOBRE O TCE</a></li> -->
+        <!-- <li class="dropdown">
+          <a href="#" class="dropdown-toggle link-menu link-dark" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">INFORMAÇÕES INSTITUCIONAIS</span></a>
+          <ul class="dropdown-menu">
+            <li><a href="https://www.tceto.tc.br/cartadeservicos/" target="_blank">Carta de Serviços</a></li>
+            <li><a href="home/competencia">Competência</a></li>
+            <li><a href="https://www.tceto.tc.br/contatos/" target="_blank">Contatos</a></li>
+            <li><a href="home/estrutura">Estrutura Organizacional</a></li>
+            <li><a href="home/identidade">Identidade Organizacional</a></li>
+          </ul>
+        </li> -->
+        <li class="nav-item"><a href="https://transparencia.tceto.tc.br/home/glossario" class="link-menu nav-link link-dark px-2">GLOSSÁRIO</a></li>
+        <li class="nav-item"><a href="https://transparencia.tceto.tc.br/home/legislacao" class="link-menu nav-link link-dark px-2">LEGISLAÇÃO</a></li>
+        <li class="nav-item"><a href="https://transparencia.tceto.tc.br/home/perguntas" class="link-menu nav-link link-dark px-2">PERGUNTAS FREQUENTES</a></li>
+        <li class="nav-item"><a href="https://transparencia.tceto.tc.br/home/mapa" class="link-menu nav-link link-dark px-2">MAPA DO SITE</a></li>
+        <li class="nav-item"><a href="https://transparencia.tceto.tc.br/home/faleconosco" class="link-menu nav-link link-dark px-2 m-0">FALE CONOSCO</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>            
+            <!-- Begin page content -->
+            <div class="container-fluid">
+                <div class="row">
+                         
+<div class="col-md-4 col-lg-3 col-xl-2">
+  <nav id="navbarScroll" class="navbar navbar-collapseOff navbar-expandd-lg collapse show">
+    <div class="">
+      <div class="flex-shrink-0 p-3 bg-white w-auto">
+        <a id="link-back" href="https://transparencia.tceto.tc.br/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+          <svg class="bi me-2" width="30" height="24">
+            <use xlink:href="#bootstrap"></use>
+          </svg>
+          <span class="fs-5 fw-semibold">
+            < Voltar</span>
+        </a>
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="https://transparencia.tceto.tc.br/licitacao" class="nav-link link-dark itens-menu-slider 
+            " aria-current="page">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3OS44MyIgaGVpZ2h0PSI1Ny42OCIgdmlld0JveD0iMCAwIDc5LjgzIDU3LjY4Ij4KICA8cGF0aCBpZD0iVW5pw6NvXzI0IiBkYXRhLW5hbWU9IlVuacOjbyAyNCIgZD0iTTUxLjM4NSw1Ny42OGEyLjc1MywyLjc1MywwLDEsMSwwLTUuNTA1SDU0LjZhMi4yOTQsMi4yOTQsMCwxLDEsMC00LjU4OEg3My44NjVhMi4yOTQsMi4yOTQsMCwxLDEsMCw0LjU4OGgzLjIxMWEyLjc1MywyLjc1MywwLDEsMSwwLDUuNTA1Wk02LjAzMSw1NS40ODlsLTUtNWEzLjUzMiwzLjUzMiwwLDAsMSwwLTVMMTMuNywzMi44MjlhMy41MzIsMy41MzIsMCwwLDEsNSwwbC42MjUuNjI1LDguOTQ3LTguOTQ3TDIzLjksMjAuMTM2bC0uNjI1LjYyNWEyLjY1LDIuNjUsMCwwLDEtMy43NDgsMGwtMi41LTIuNWEyLjY0OSwyLjY0OSwwLDAsMSwwLTMuNzQ3TDMwLjc2Ny43NzdhMi42NDksMi42NDksMCwwLDEsMy43NDcsMGwyLjUsMi41YTIuNjUsMi42NSwwLDAsMSwwLDMuNzQ4bC0uNjI1LjYyNCwxMi40OSwxMi40OS42MjUtLjYyNWEyLjY1MSwyLjY1MSwwLDAsMSwzLjc0OCwwbDIuNSwyLjVhMi42NDksMi42NDksMCwwLDEsMCwzLjc0N0w0Mi4wMDgsMzkuNWEyLjY1MSwyLjY1MSwwLDAsMS0zLjc0OCwwbC0yLjUtMi41YTIuNjQ5LDIuNjQ5LDAsMCwxLDAtMy43NDdsLjYyNS0uNjI1LTQuMzcyLTQuMzcxTDIzLjA3LDM3LjJsLjYyNS42MjVhMy41MzIsMy41MzIsMCwwLDEsMCw1TDExLjAyNyw1NS40ODlhMy41MzIsMy41MzIsMCwwLDEtNSwwWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDEgMCkiIGZpbGw9IiNDMTZDMDAiLz4KPC9zdmc+Cg==" alt="">
+              <p class="text-item-mslider">Licitações</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://transparencia.tceto.tc.br/licitacao/fracassadaDeserta" class="nav-link link-dark itens-menu-slider 
+            " aria-current="page">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3OS45NSIgaGVpZ2h0PSI1Ny41NSIgdmlld0JveD0iMCAwIDc5Ljk1IDU3LjU1Ij4KICA8ZyBpZD0iaWNvbi1wcmVzdC1kaXNwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNC4wNSAtMjMuNzUpIj4KICAgIDxwYXRoIGlkPSJDYW1pbmhvXzQyMSIgZD0iTTY4LjQsNzQuM0ExNC4yLDE0LjIsMCwxLDEsODIuNSw2MC4xLDE0LjE5LDE0LjE5LDAsMCwxLDY4LjQsNzQuM1ptMC0yNC44QTEwLjYsMTAuNiwwLDEsMCw3OSw2MC4xaDBBMTAuOCwxMC44LDAsMCwwLDY4LjQsNDkuNVoiIGZpbGw9IiNDMTZDMDAiLz4KICAgIDxnIGlkPSJHcnVwb181OTEiIGRhdGEtbmFtZT0iR3J1cG8gNTkxIj4KICAgICAgPHBhdGggaWQ9IkNhbWluaG9fNDU5IiBkYXRhLW5hbWU9IkNhbWluaG8gNDU5IiBkPSJNNzAuNCw2NmwtMi0zLjItMiwzLjJINjEuOGw0LjMtNkw2Miw1NC4xaDQuNWwyLDMsMi0zaDQuM2wtNC4xLDUuNyw0LjQsNi4xSDcwLjRWNjZaIiBmaWxsPSIjQzE2QzAwIi8+CiAgICA8L2c+CiAgICA8ZyBpZD0iR3J1cG9fNTkyIiBkYXRhLW5hbWU9IkdydXBvIDU5MiI+CiAgICAgIDxwYXRoIGlkPSJDYW1pbmhvXzQ2MCIgZGF0YS1uYW1lPSJDYW1pbmhvIDQ2MCIgZD0iTTU5LjYsNDUuNGwtMi4yLTIuMmEyLjY1NywyLjY1NywwLDAsMC0zLjcsMGwtLjcuNkw0MC41LDMxLjNsLjYtLjZoMGEyLjY1NywyLjY1NywwLDAsMCwwLTMuN2wtMi41LTIuNWgwYTIuNjU3LDIuNjU3LDAsMCwwLTMuNywwTDIxLjEsMzguMmgwYTIuNjU3LDIuNjU3LDAsMCwwLDAsMy43bDIuNSwyLjVoMGEyLjY1NywyLjY1NywwLDAsMCwzLjcsMGwuNi0uNiw0LjQsNC40LTguOSw4LjktLjYtLjZoMGEzLjUsMy41LDAsMCwwLTUsMEw1LjEsNjkuMWgwYTMuNSwzLjUsMCwwLDAsMCw1bDUsNWgwYTMuNSwzLjUsMCwwLDAsNSwwTDI3LjgsNjYuNGgwYTMuNSwzLjUsMCwwLDAsMC01bC0uNi0uNiw4LjktOC45LDQuNCw0LjQtLjYuNmgwYTIuNjU3LDIuNjU3LDAsMCwwLDAsMy43bDIuNSwyLjVhMi42NTcsMi42NTcsMCwwLDAsMy43LDBsNS4yLTUuMkExNy4yNTcsMTcuMjU3LDAsMCwxLDU5LjYsNDUuNFoiIGZpbGw9IiNDMTZDMDAiLz4KICAgICAgPHBhdGggaWQ9IkNhbWluaG9fNDYxIiBkYXRhLW5hbWU9IkNhbWluaG8gNDYxIiBkPSJNODEuMiw3NS44SDc4YTIuMjYzLDIuMjYzLDAsMCwwLDIuMy0yLjMsMi45MiwyLjkyLDAsMCwwLS4yLS45LDE3LjAzNywxNy4wMzcsMCwwLDEtMjMuNSwwLDIuOTIsMi45MiwwLDAsMC0uMi45LDIuMjYzLDIuMjYzLDAsMCwwLDIuMywyLjNINTUuNGEyLjc1LDIuNzUsMCwxLDAsLjEsNS41SDgxLjNhMi43NSwyLjc1LDAsMSwwLS4xLTUuNVoiIGZpbGw9IiNDMTZDMDAiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPgo=" alt="">
+              <p class="text-item-mslider">Licitações Fracassadas e/ou Desertas</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="https://transparencia.tceto.tc.br/avisocontratacao" class="nav-link link-dark itens-menu-slider 
+            " aria-current="page">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTExLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMS4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgoKPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMTE3LjAwMDAwMCkgc2NhbGUoMC4xMDAwMDAsLTAuMTAwMDAwKSIKZmlsbD0iI0MxNkMwMCIgc3Ryb2tlPSJub25lIj4KPHBhdGggZD0iTTIzIDExNjMgYy0xMCAtNCAtMTMgLTg1IC0xMyAtMzU5IDAgLTM0NyAwIC0zNTQgMjAgLTM1NCAxMSAwIDIwIC03CjIwIC0xNSAwIC04IC05IC0xNSAtMjAgLTE1IC0xOSAwIC0yMCAtNyAtMjAgLTk4IGwwIC05NyAxMDggLTEwOCAxMDcgLTEwNwozNTcgMCBjMzE1IDAgMzU3IDIgMzYyIDE2IDMgOSA2IDExMiA2IDIzMCBsMCAyMTQgLTc2IC04NSBjLTQyIC00OCAtODMgLTg1Ci05NCAtODUgLTEwIDAgLTQyIC0zMCAtNzQgLTcwIC0zMSAtMzggLTYzIC03MCAtNzAgLTcwIC04IDAgLTIwIDEwIC0yOCAyMgotMTQgMjAgLTE3IDIxIC00OCA4IC0yOSAtMTIgLTM0IC0xMiAtNDUgNCAtMTEgMTQgLTEzIDE1IC0xOSAxIC02IC0xNyAtMzIKLTIwIC00MSAtNiAtOSAxNSAzOCAxMDUgNTggMTA5IDE2IDMgMjAgLTMgMzMgLTQ1IDMgLTEwIDkgLTEwIDMwIC0xIDIzIDExIDI4CjEwIDQ0IC0xMCBsMTggLTIyIDM4IDQ3IGMyOSAzNSAzNyA1NCAzNiA3OCAtNSA3NCAxNyAyMDQgNDYgMjY2IGwyOCA2NCAtMzEwCjAgYy0zMDQgMCAtMzExIDAgLTMxMSAyMCAwIDIwIDggMjAgMzA4IDIzIDI3MCAyIDMwOCAwIDMxMyAtMTMgNCAtMTAgMzIgNDIKNzQgMTM1IDM3IDgzIDcyIDE1NiA3OSAxNjMgMTcgMTcgMTQgMTMyIC01IDE1MSAtMTQgMTQgLTY4IDE2IC00NTcgMTUgLTI0MyAwCi00NDggLTMgLTQ1NCAtNnogbTYxNyAtMTAzIGMwIC0xOSAtNyAtMjAgLTE2NSAtMjAgLTE1OCAwIC0xNjUgMSAtMTY1IDIwIDAKMTkgNyAyMCAxNjUgMjAgMTU4IDAgMTY1IC0xIDE2NSAtMjB6IG0xNTAgLTkwIGMwIC0yMCAtNyAtMjAgLTMwOSAtMjAgLTI5OSAwCi0zMzMgMyAtMzE2IDMwIDQgNiAxMjAgMTAgMzE2IDEwIDMwMiAwIDMwOSAwIDMwOSAtMjB6IG0tMyAtODYgYzMgLTkgMCAtMjAKLTggLTI1IC04IC01IC0xNDUgLTkgLTMwNSAtOSAtMjQzIDAgLTI5NCAyIC0zMDQgMTUgLTYgOCAtOSAxOSAtNSAyNSA0IDYgMTEwCjEwIDMxMSAxMCAyNzAgMCAzMDUgLTIgMzExIC0xNnogbS0yIC05OSBjMCAtMjAgLTcgLTIwIC0zMDAgLTIyIC0xNjUgLTIgLTMwNgoxIC0zMTQgNiAtOCA1IC0xMSAxNiAtOCAyNSA2IDE1IDM5IDE2IDMxNCAxNCAzMDAgLTMgMzA4IC0zIDMwOCAtMjN6IG0tMjk2Ci0xNjQgYzggLTUgMTEgLTE2IDggLTI1IC02IC0xNCAtMjkgLTE2IC0xNjYgLTE2IC0xNjEgMCAtMTg2IDUgLTE2MSAzNSAxMCAxMgo0MyAxNSAxNTkgMTUgODAgMCAxNTIgLTQgMTYwIC05eiBtLTEyMiAtODggYzgwIC0zNyAxMTEgLTE1MCA2NCAtMjI3IC0zOSAtNjMKLTEzNyAtOTUgLTE5NCAtNjQgLTEyIDYgLTM3IDE0IC01NiAxNyAtMzUgNiAtNTYgMzEgLTI2IDMxIDE0IDAgMTUgMyA1IDE1IC03CjggLTIzIDE1IC0zNiAxNSAtNDcgMCAtMjMgMTggMjkgMjIgNjAgNSA2NCA0IDQ4IC0xNiAtMTggLTIxIDMyIC01NCA1NCAtMzYKMTQgMTIgMTYgMTAgMTQgLTcgLTIgLTEyIDI2IC0yMSA1MiAtMTYgMjAgNCAyNSA5IDIyIDI0IC0zIDEwIC0xMSAxOSAtMTggMTkKLTYgMCAtMTkgMTkgLTI4IDQyIC0xNiAzOSAtMTYgNDMgMiA4NCAyNCA1MyAxOCA4OCAtMTMgODAgLTExIC0zIC0yNiAtNiAtMzMKLTYgLTcgMCAtMTAgLTcgLTYgLTE3IDUgLTEzIDIgLTE1IC0xMiAtMTAgLTkgNCAtMjMgMyAtMzAgLTMgLTE2IC0xMyAtMTE3IC04Ci0xMjIgNiAtMiA3IDE1IDExIDQxIDEyIDI4IDAgNTYgOCA3MyAyMCAxNSAxMCAzNSAyMiA0MyAyNSAzMCAxMSA5MyA3IDEyNwotMTB6IG0tMTgxIC05NyBjMTggLTE5IDE4IC0yNiAtMSAtMjYgLTggMCAtMTUgLTkgLTE1IC0yMCAwIC0xOCAtNyAtMjAgLTc2Ci0yMCAtNTYgMCAtNzUgMyAtNzIgMTMgMyA3IDI2IDEzIDU0IDE1IDU5IDQgODUgMjIgMzIgMjIgLTM2IDAgLTU0IDExIC00MSAyNAoxMyAxMiAxMDQgNiAxMTkgLTh6IG0tOTYgLTEwNiBjMCAtNSAtNyAtMTAgLTE1IC0xMCAtOCAwIC0xNSA1IC0xNSAxMCAwIDYgNwoxMCAxNSAxMCA4IDAgMTUgLTQgMTUgLTEweiBtMjggLTUyIGMtMyAtNyAtMTUgLTEzIC0yOCAtMTMgLTEzIDAgLTI1IDYgLTI3CjEzIC0zIDggNiAxMiAyNyAxMiAyMSAwIDMwIC00IDI4IC0xMnogbTExNCAtMTQ0IGMyIC00NiAxIC04NCAtMiAtODQgLTYgMAotMTcwIDE2MyAtMTcwIDE3MCAwIDMgMzggNCA4NCAyIGw4NSAtMyAzIC04NXogbTU1OCAtMjQgYzAgLTE5IC03IC0yMCAtMTY0Ci0yMCAtOTkgMCAtMTY3IDQgLTE3MSAxMCAtMTUgMjUgMTMgMzAgMTcxIDMwIDE1NyAwIDE2NCAtMSAxNjQgLTIweiIvPgo8cGF0aCBkPSJNMzM1IDQ5MSBjMyAtMTAgLTIgLTM3IC0xMSAtNjAgLTE2IC00MCAtMTUgLTQyIDcgLTg4IDEzIC0yNiAyOSAtNDkKMzYgLTUxIDE3IC01IDUyIDUwIDM1IDU2IC0xNyA1IC0xNSAyMiA0IDIyIDExIDAgMTQgOCAxMiAzMyAtMiAyMyAtOCAzMiAtMjAKMzEgLTIwIC0yIC0yMyA3IC03IDIzIDcgNyAyIDE3IC0xOSAzMiAtMzcgMjYgLTQ1IDI2IC0zNyAyeiIvPgo8cGF0aCBkPSJNOTgzIDk4MiBjLTYgLTQgLTU2IC0xMDggLTExMSAtMjMyIC05NyAtMjE3IC0xMDEgLTIyOCAtMTA4IC0zMTcgLTMKLTUyIC0zIC05MyAyIC05MyA1IDAgMzcgMzMgNzIgNzMgNTYgNjMgNzUgOTcgMTU4IDI4MiA1MSAxMTYgOTQgMjIwIDk0IDIzMiAwCjQwIC03MSA3OCAtMTA3IDU1eiBtNyAtMTI3IGMxNyAtOSAzMCAtMjEgMzAgLTI4IDAgLTkgLTEyNiAtMzAxIC0xMzcgLTMxNiAtMgotMyAtNjIgMTggLTcyIDI1IC00IDQgMTQxIDMzNCAxNDcgMzM0IDEgMCAxNiAtNyAzMiAtMTV6Ii8+CjwvZz4KPC9zdmc+Cg==" alt="">
+              <p class="text-item-mslider">Aviso de Contratação Direta</p>
+            </a>
+          </li>
+          <li>
+            <a href="https://transparencia.tceto.tc.br/contratacao" class="nav-link link-dark itens-menu-slider 
+            ">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3OS45NSIgaGVpZ2h0PSI1Ny41NSIgdmlld0JveD0iMCAwIDc5Ljk1IDU3LjU1Ij4KICA8ZyBpZD0iaWNvbi1wcmVzdC1kaXNwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtNC4wNSAtMjMuNzUpIj4KICAgIDxwYXRoIGlkPSJDYW1pbmhvXzQyMSIgZD0iTTY4LjQsNzQuM0ExNC4yLDE0LjIsMCwxLDEsODIuNSw2MC4xLDE0LjE5LDE0LjE5LDAsMCwxLDY4LjQsNzQuM1ptMC0yNC44QTEwLjYsMTAuNiwwLDEsMCw3OSw2MC4xaDBBMTAuOCwxMC44LDAsMCwwLDY4LjQsNDkuNVoiIGZpbGw9IiNDMTZDMDAiLz4KICAgIDxnIGlkPSJHcnVwb181OTEiIGRhdGEtbmFtZT0iR3J1cG8gNTkxIj4KICAgICAgPHBhdGggaWQ9IkNhbWluaG9fNDU5IiBkYXRhLW5hbWU9IkNhbWluaG8gNDU5IiBkPSJNNzAuNCw2NmwtMi0zLjItMiwzLjJINjEuOGw0LjMtNkw2Miw1NC4xaDQuNWwyLDMsMi0zaDQuM2wtNC4xLDUuNyw0LjQsNi4xSDcwLjRWNjZaIiBmaWxsPSIjQzE2QzAwIi8+CiAgICA8L2c+CiAgICA8ZyBpZD0iR3J1cG9fNTkyIiBkYXRhLW5hbWU9IkdydXBvIDU5MiI+CiAgICAgIDxwYXRoIGlkPSJDYW1pbmhvXzQ2MCIgZGF0YS1uYW1lPSJDYW1pbmhvIDQ2MCIgZD0iTTU5LjYsNDUuNGwtMi4yLTIuMmEyLjY1NywyLjY1NywwLDAsMC0zLjcsMGwtLjcuNkw0MC41LDMxLjNsLjYtLjZoMGEyLjY1NywyLjY1NywwLDAsMCwwLTMuN2wtMi41LTIuNWgwYTIuNjU3LDIuNjU3LDAsMCwwLTMuNywwTDIxLjEsMzguMmgwYTIuNjU3LDIuNjU3LDAsMCwwLDAsMy43bDIuNSwyLjVoMGEyLjY1NywyLjY1NywwLDAsMCwzLjcsMGwuNi0uNiw0LjQsNC40LTguOSw4LjktLjYtLjZoMGEzLjUsMy41LDAsMCwwLTUsMEw1LjEsNjkuMWgwYTMuNSwzLjUsMCwwLDAsMCw1bDUsNWgwYTMuNSwzLjUsMCwwLDAsNSwwTDI3LjgsNjYuNGgwYTMuNSwzLjUsMCwwLDAsMC01bC0uNi0uNiw4LjktOC45LDQuNCw0LjQtLjYuNmgwYTIuNjU3LDIuNjU3LDAsMCwwLDAsMy43bDIuNSwyLjVhMi42NTcsMi42NTcsMCwwLDAsMy43LDBsNS4yLTUuMkExNy4yNTcsMTcuMjU3LDAsMCwxLDU5LjYsNDUuNFoiIGZpbGw9IiNDMTZDMDAiLz4KICAgICAgPHBhdGggaWQ9IkNhbWluaG9fNDYxIiBkYXRhLW5hbWU9IkNhbWluaG8gNDYxIiBkPSJNODEuMiw3NS44SDc4YTIuMjYzLDIuMjYzLDAsMCwwLDIuMy0yLjMsMi45MiwyLjkyLDAsMCwwLS4yLS45LDE3LjAzNywxNy4wMzcsMCwwLDEtMjMuNSwwLDIuOTIsMi45MiwwLDAsMC0uMi45LDIuMjYzLDIuMjYzLDAsMCwwLDIuMywyLjNINTUuNGEyLjc1LDIuNzUsMCwxLDAsLjEsNS41SDgxLjNhMi43NSwyLjc1LDAsMSwwLS4xLTUuNVoiIGZpbGw9IiNDMTZDMDAiLz4KICAgIDwvZz4KICA8L2c+Cjwvc3ZnPgo=" alt="">
+              <p class="text-item-mslider text-gray">Dispensas e Inexigibilidades</p>
+            </a>
+          </li>
+          <li>
+            <a href="https://transparencia.tceto.tc.br/ata" class="nav-link link-dark itens-menu-slider 
+            ">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MS4xIiB2aWV3Qm94PSIwIDAgNjAgNjEuMSI+CiAgPGcgaWQ9Imljb24tcHJlc3QtY29udGFzIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgtMjAuNSAtMjApIj4KICAgIDxwYXRoIGlkPSJDYW1pbmhvXzQyMSIgZD0iTTY2LjMsNzYuOUExNC4yLDE0LjIsMCwxLDEsODAuNSw2Mi43LDE0LjE5LDE0LjE5LDAsMCwxLDY2LjMsNzYuOVptMC0yNC43QTEwLjYsMTAuNiwwLDEsMCw3Ni45LDYyLjhoMEExMC42NywxMC42NywwLDAsMCw2Ni4zLDUyLjJaIiBmaWxsPSIjQzE2QzAwIi8+CiAgICA8ZyBpZD0iR3J1cG9fNTg2IiBkYXRhLW5hbWU9IkdydXBvIDU4NiI+CiAgICAgIDxwYXRoIGlkPSJDYW1pbmhvXzQ1MSIgZGF0YS1uYW1lPSJDYW1pbmhvIDQ1MSIgZD0iTTU0LjksMjBWMzEuMkg2Ny42WiIgZmlsbD0iI0MxNkMwMCIvPgogICAgICA8cGF0aCBpZD0iQ2FtaW5ob180NTIiIGRhdGEtbmFtZT0iQ2FtaW5obyA0NTIiIGQ9Ik02Ni4zLDc5LjloMGExNy4xMywxNy4xMywwLDAsMS0xNS41LTkuOEgzOC43YTIuMiwyLjIsMCwxLDEsMC00LjRINDkuNGExNC45MTksMTQuOTE5LDAsMCwxLS4yLTIuMUgzOC43YTIuMiwyLjIsMCwwLDEsMC00LjRINDkuNWExNi44NzEsMTYuODcxLDAsMCwxLDMuMS02LjhoLTE0YTIuMiwyLjIsMCwxLDEsMC00LjRINTcuNWExNy4yMDgsMTcuMjA4LDAsMCwxLDguNy0yLjQsNS4yODMsNS4yODMsMCwwLDEsMS4zLjFWMzNINTMuMVYyMEgyMC41VjgxLjFINjcuN1Y3OS45Wk0zOC43LDQxLjZINTkuNWEyLjIsMi4yLDAsMCwxLDAsNC40SDM4LjdhMi4yLDIuMiwwLDAsMSwwLTQuNFpNMzIuNSw2Ny45YTMuMTM5LDMuMTM5LDAsMCwxLTIuOSwydjEuM2EuNDMuNDMsMCwwLDEtLjQuNGgtLjlhLjQzLjQzLDAsMCwxLS40LS40VjY5LjlhMy43NzUsMy43NzUsMCwwLDEtMi4zLS44aC0uMWMtLjItLjItLjItLjUsMC0uNmwuOS0uOWMuMS0uMS40LS4yLjUsMGExLjYxMywxLjYxMywwLDAsMCwuOS4zaDEuOGEuODYuODYsMCwwLDAsLjgtLjguNzYuNzYsMCwwLDAtLjYtLjhMMjcsNjUuNWEzLjc2MSwzLjc2MSwwLDAsMS0yLjItMi43di0uM2EyLjk4OSwyLjk4OSwwLDAsMSwyLjktM2guMVY1OC4yYS40My40MywwLDAsMSwuNC0uNGguOWEuNDMuNDMsMCwwLDEsLjQuNHYxLjNhMy43NzUsMy43NzUsMCwwLDEsMi4zLjhoMGMuMi4yLjIuNSwwLC42bC0uOCwxYy0uMS4xLS40LjItLjUsMGExLjYxMywxLjYxMywwLDAsMC0uOS0uM0gyNy44YS44Ni44NiwwLDAsMC0uOC44Ljc2Ljc2LDAsMCwwLC42LjhsMi45LjloLjFBMy4wNjUsMy4wNjUsMCwwLDEsMzIuNSw2Ny45Wm0wLTE3LjZhMy4xMzksMy4xMzksMCwwLDEtMi45LDJ2MS4zYS40My40MywwLDAsMS0uNC40aC0uOWEuNDMuNDMsMCwwLDEtLjQtLjRWNTIuM2EzLjc3NSwzLjc3NSwwLDAsMS0yLjMtLjhoLS4xYy0uMi0uMi0uMi0uNSwwLS42bC45LS45Yy4xLS4xLjQtLjIuNS0uMWExLjYxMywxLjYxMywwLDAsMCwuOS4zaDEuOGEuODYuODYsMCwwLDAsLjgtLjguNzYuNzYsMCwwLDAtLjYtLjhMMjcsNDcuOGEzLjIzOCwzLjIzOCwwLDAsMS0yLjMtMi42di0uM2EyLjk4OSwyLjk4OSwwLDAsMSwyLjktM2guMVY0MC42YS40My40MywwLDAsMSwuNC0uNEgyOWEuNDMuNDMsMCwwLDEsLjQuNHYxLjNhMy43NzUsMy43NzUsMCwwLDEsMi4zLjhoMGMuMi4yLjIuNSwwLC42bC0uNy45Yy0uMS4xLS40LjItLjUsMGExLjYxMywxLjYxMywwLDAsMC0uOS0uM0gyNy44YS44Ni44NiwwLDAsMC0uOC44Ljc2Ljc2LDAsMCwwLC42LjhsMi45LjloLjFBMy4xMzMsMy4xMzMsMCwwLDEsMzIuNSw1MC4zWiIgZmlsbD0iI0MxNkMwMCIvPgogICAgPC9nPgogICAgPHBhdGggaWQ9IkNhbWluaG9fNDIyIiBkPSJNNTkuOCw1Ny4yaDQuNmwyLjEsNy40LDYuOS0yMC41aDQuNUw2OS40LDY5LjZINjMuOVoiIGZpbGw9IiNDMTZDMDAiLz4KICA8L2c+Cjwvc3ZnPgo=" alt="">
+              <p class="text-item-mslider text-gray">Atas de Registro de Preços</p>
+            </a>
+          </li>
+          <li>
+            <a href="https://transparencia.tceto.tc.br/contrato/Index" class="nav-link link-dark itens-menu-slider 
+            active">
+              <!-- <img class="img-menu-slider" src="https://transparencia.tceto.tc.br/public/images/icons/icon-554.svg" alt=""> -->
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3OC43OTMiIGhlaWdodD0iNTUuMDU0IiB2aWV3Qm94PSIwIDAgNzguNzkzIDU1LjA1NCI+CiAgPGcgaWQ9IkdydXBvXzU1NCIgZGF0YS1uYW1lPSJHcnVwbyA1NTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDY3My4xNzUgLTIxNDUuNDczKSI+CiAgICA8cGF0aCBpZD0iSWNvbl9vcGVuLWRvY3VtZW50IiBkYXRhLW5hbWU9Ikljb24gb3Blbi1kb2N1bWVudCIgZD0iTTAsMFY1NS4wNTRINDguMTczVjI3LjUyN0gyMC42NDVWMFpNMjcuNTI3LDBWMjAuNjQ1SDQ4LjE3M1pNNi44ODIsMTMuNzY0aDYuODgydjYuODgySDYuODgyWm0wLDEzLjc2NGg2Ljg4MnY2Ljg4Mkg2Ljg4MlptMCwxMy43NjRIMzQuNDA5djYuODgySDYuODgyWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTY0Mi41NTUgMjE0NS40NzMpIiBmaWxsPSIjQzE2QzAwIi8+CiAgICA8cGF0aCBpZD0iSWNvbl9hd2Vzb21lLXBlbi1hbHQiIGRhdGEtbmFtZT0iSWNvbiBhd2Vzb21lLXBlbi1hbHQiIGQ9Ik0yNi43NzIsMy45ODgsMjMuNTQuNzU2YTIuNTgyLDIuNTgyLDAsMCwwLTMuNjUxLDBMMTYuODQ5LDMuOGw2Ljg4Myw2Ljg4MywzLjA0LTMuMDRhMi41ODIsMi41ODIsMCwwLDAsMC0zLjY1MVpNMTMuNSwyLjg4NGEyLjE1LDIuMTUsMCwwLDAtMy4wNDEsMEw0LjA3Niw5LjI3MWEuODYuODYsMCwwLDAsMCwxLjIxNkw1LjI5MywxMS43YS44Ni44NiwwLDAsMCwxLjIxNywwbDUuNDc0LTUuNDc0TDEzLjIsNy40NDUsNS4wNTIsMTUuNTkzQTE3LjU4MywxNy41ODMsMCwwLDAsLjAxLDI2LjA4MWwwLC4wMTJhMS4yOSwxLjI5LDAsMCwwLDEuNDI0LDEuNDI1LDE3LjU4MiwxNy41ODIsMCwwLDAsMTAuNS01LjA0M0wyMi41MTUsMTEuOWwtNC40NS00LjQ1TDEzLjUsMi44ODRaIiB0cmFuc2Zvcm09Im1hdHJpeCgwLjI1OSwgLTAuOTY2LCAwLjk2NiwgMC4yNTksIC02NzMuMTc1LCAyMTg4LjIzOCkiIGZpbGw9IiNDMTZDMDAiLz4KICA8L2c+Cjwvc3ZnPgo=" alt="">
+              
+              <p class="text-item-mslider text-gray">Contratos</p>
+            </a>
+          </li>
+          <li>
+            <a href="https://transparencia.tceto.tc.br/convenio" class="nav-link link-dark itens-menu-slider 
+              ">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3NC44MjkiIGhlaWdodD0iNDQuOTE0IiB2aWV3Qm94PSIwIDAgNzQuODI5IDQ0LjkxNCI+CiAgPHBhdGggaWQ9Ikljb25fYXdlc29tZS1oYW5kc2hha2UiIGRhdGEtbmFtZT0iSWNvbiBhd2Vzb21lLWhhbmRzaGFrZSIgZD0iTTUwLjgyNSw0LjVINDAuNzgyYTMuNzQsMy43NCwwLDAsMC0yLjUyNS45ODJMMjYuNzYzLDE2Yy0uMDEyLjAxMi0uMDIzLjAzNS0uMDM1LjA0N2E0LjY1MSw0LjY1MSwwLDAsMC0uMjQ2LDYuNTQ4LDQuODc2LDQuODc2LDAsMCwwLDYuNTU5LjMxNmMuMDEyLS4wMTIuMDM1LS4wMTIuMDQ3LS4wMjNsOS4zNDItOC41NTlhMS44NywxLjg3LDAsMCwxLDIuNTI1LDIuNzU5TDQxLjksMTkuODg3bDE3LjAyNCwxMy44MmE4LjQyNCw4LjQyNCwwLDAsMSwuOTI0LjlWMTEuOTgzTDUzLjQ2OCw1LjZhMy43MTQsMy43MTQsMCwwLDAtMi42NDItMS4xWk02My42LDEyLjAwNlYzOC4xODVhMy43MzcsMy43MzcsMCwwLDAsMy43NDEsMy43NDFoNy40ODNWMTIuMDA2Wm01LjYxMiwyNi4xNzhhMS44NzEsMS44NzEsMCwxLDEsMS44NzEtMS44NzFBMS44NzYsMS44NzYsMCwwLDEsNjkuMjE3LDM4LjE4NVpNMCw0MS45MTVINy40ODNhMy43MzcsMy43MzcsMCwwLDAsMy43NDEtMy43NDFWMTIuMDA2SDBabTUuNjEyLTcuNDcxYTEuODcxLDEuODcxLDAsMSwxLTEuODcxLDEuODcxQTEuODc2LDEuODc2LDAsMCwxLDUuNjEyLDM0LjQ0M1ptNTAuOTY2LDIuMTc1TDM5LjEyMiwyMi40NDdsLTMuNTA4LDMuMjE1QTguNDE2LDguNDE2LDAsMCwxLDI0LjIzOCwxMy4yNTdMMzMuOCw0LjVIMjRhMy43MzUsMy43MzUsMCwwLDAtMi42NDIsMS4xbC02LjQsNi4zODRWMzguMTYxaDIuMTRsMTAuNTgxLDkuNTc2QTcuNDgxLDcuNDgxLDAsMCwwLDM4LjIxLDQ2LjY1bC4wMjMtLjAyMywyLjA5MywxLjgxMmE0LjM0NSw0LjM0NSwwLDAsMCw2LjExNS0uNjMxbDMuNjcxLTQuNTEzLjYzMS41MTRBMy43MzYsMy43MzYsMCwwLDAsNTYsNDMuMjU5bDEuMTExLTEuMzY4YTMuNzQ4LDMuNzQ4LDAsMCwwLS41MzgtNS4yNzNaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwIC00LjUpIiBmaWxsPSIjQzE2QzAwIi8+Cjwvc3ZnPgo=" alt="">
+              <p class="text-item-mslider text-gray">Convênios e Instrumentos Congêneres</p>
+            </a>
+          </li>
+          <li>
+            <a href="https://transparencia.tceto.tc.br/contratacaoanual" class="nav-link link-dark itens-menu-slider 
+              ">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzkuNiIgaGVpZ2h0PSIxMDAuNiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWw6c3BhY2U9InByZXNlcnZlIiB2ZXJzaW9uPSIxLjEiPgoKIDxnPgogIDx0aXRsZT5MYXllciAxPC90aXRsZT4KICA8ZyBzdHJva2U9Im51bGwiIGlkPSJzdmdfMSI+CiAgIDxwb2x5Z29uIHN0cm9rZT0ibnVsbCIgaWQ9InN2Z18yIiBmaWxsPSIjQzE2QzAwIiBwb2ludHM9IjU3Ljc1ODk3MzcwMjc4ODM1LDAuMzE4ODU5ODc1MjAyMTc4OTYgNTcuNzU4OTczNzAyNzg4MzUsMTguNjU5ODIwNTU2NjQwNjI1IDc4LjU1NjMwNjQ2NjQ2MDIzLDE4LjY1OTgyMDU1NjY0MDYyNSAiIGNsYXNzPSJzdDAiLz4KICAgPHBhdGggc3Ryb2tlPSJudWxsIiBpZD0ic3ZnXzMiIGZpbGw9IiNDMTZDMDAiIGQ9Im03OC4zOTI1NCwyMS42MDc0N2wtMjMuNTgxMjMsMGwwLC0yMS4yODg2MWwtNTMuMzg1MjksMGwwLDEwMC4wNTY0OGw3Ny4yOTQwNCwwbC0wLjMyNzUyLC03OC43Njc4N3ptLTEwLjk3MTgyLDY3Ljc5NjA0bC01NC42OTUzNiwwbDAsLTMuNzY2NDVsNi4yMjI4MywwbDAsLTI1Ljg3Mzg1YzAsLTAuODE4NzkgMC42NTUwMywtMS40NzM4MyAxLjQ3MzgzLC0xLjQ3MzgzbDguMDI0MTcsMGMwLjgxODc5LDAgMS40NzM4MywwLjY1NTAzIDEuNDczODMsMS40NzM4M2wwLDI1Ljg3Mzg1bDQuNzQ5LDBsMCwtMzMuMDc5MjNjMCwtMC44MTg3OSAwLjY1NTAzLC0xLjQ3MzgzIDEuNDczODMsLTEuNDczODNsOC4wMjQxNywwYzAuODE4NzksMCAxLjQ3MzgzLDAuNjU1MDMgMS40NzM4MywxLjQ3MzgzbDAsMzIuOTE1NDdsNC43NDksMGwwLC00MC45Mzk2NGMwLC0wLjgxODc5IDAuNjU1MDMsLTEuNDczODMgMS40NzM4MywtMS40NzM4M2w4LjAyNDE3LDBjMC44MTg3OSwwIDEuNDczODMsMC42NTUwMyAxLjQ3MzgzLDEuNDczODNsMCw0MC45Mzk2NGw2LjIyMjgzLDBsMCwzLjkzMDIxbC0wLjE2Mzc2LDB6IiBjbGFzcz0ic3QwIi8+CiAgPC9nPgogPC9nPgo8L3N2Zz4=" alt="" style="padding: 0 3px;">
+              <p class="text-item-mslider text-gray">Plano de Contratação Anual - PCA</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://transparencia.tceto.tc.br/licitantesEContratadosSancionados" class="nav-link link-dark itens-menu-slider 
+              ">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI3LjguMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkNhbWFkYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB2aWV3Qm94PSIwIDAgODguMSAxMDAuNiIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgODguMSAxMDAuNjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPgoKPGc+Cgk8Zz4KCQk8cGF0aCBmaWxsPSIjQzE2QzAwIiBjbGFzcz0ic3QwIiBkPSJNMTEuOCwxMy44Yy0yLjItMC4xLTUuMywxLjctNS4zLDcuMWMwLDIuNywwLDksMCw5aDEyLjdjMCwwLDAuNi02LjYtMS41LTExLjhDMTYuNywxNS44LDE1LDE0LDExLjgsMTMuOHoKCQkJIE0zOC4xLDU3LjJjLTMuMiwwLTUuOCwyLjYtNS44LDUuOGMwLDMuMiwyLjYsNS44LDUuOCw1LjhjMy4yLDAsNS44LTIuNiw1LjgtNS44QzQzLjksNTkuOCw0MS4zLDU3LjIsMzguMSw1Ny4yeiBNMzguMSw2Ny4yCgkJCWMtMi4zLDAtNC4yLTEuOS00LjItNC4yYzAtMi4zLDEuOS00LjIsNC4yLTQuMmMyLjMsMCw0LjIsMS45LDQuMiw0LjJDNDIuNCw2NS4zLDQwLjUsNjcuMiwzOC4xLDY3LjJ6IE02Mi42LDcybDQuMyw2LjRsNi4zLTkKCQkJYzAtMTguMSwwLTQxLjYsMC00NC43YzAtOC43LTMuOS0xMy42LTEwLjYtMTMuNmMtNC44LDAtNDguMiwwLTQ4LjIsMFMyMiwxMi43LDIyLDI3YzAuMiwzLjMsMCwxNS40LTAuMywyOGwtMC45LDM0LjZINjUKCQkJbC05LjMtMTMuM0w2Mi42LDcyeiBNNjYuMyw2M0g1MC4ydi0zLjdoMTYuMVY2M3ogTTI5LjksMjUuM2gzNi45VjI5SDI5LjlWMjUuM3ogTTI5LjksMzIuM2gzNi45VjM2SDI5LjlWMzIuM3ogTTI5LjcsMzkuM2gzNy4xCgkJCVY0M0gyOS43VjM5LjN6IE0yOS43LDQ2LjNoMzcuMVY1MEgyOS43VjQ2LjN6IE00MS40LDg2LjNMMzgsODQuNmwtMy40LDEuN1Y3Mi4xbDMuNC0xLjFsMy4zLDEuMVY4Ni4zeiBNNDMuNCw2Ny45bC0xLjcsMy4zCgkJCWwtMy42LTEuMWwtMy41LDEuMkwzMi45LDY4bC0zLjMtMS43bDEuMS0zLjZsLTEuMi0zLjVsMy4zLTEuN2wxLjctMy4zbDMuNiwxLjFsMy41LTEuMmwxLjcsMy4zbDMuMywxLjdsLTEuMSwzLjZsMS4yLDMuNQoJCQlMNDMuNCw2Ny45eiBNNTAuMiw2NS42aDE2LjF2My43SDUwLjJWNjUuNnogTTgwLjgsNjMuNEw2Ny40LDgyLjZsLTUuMi03LjlMNTguOCw3N2w4LjUsMTIuOGwxNi44LTI0TDgwLjgsNjMuNHoiLz4KCTwvZz4KPC9nPgo8L3N2Zz4K" alt="" style="padding: 0 3px;">
+              <p class="text-item-mslider text-gray">Licitantes e Contratados Sancionados</p>
+            </a>
+          </li>
+
+          <li>
+            <a href="https://transparencia.tceto.tc.br/relacaoDeGestoresEFiscaisDeContrato" class="nav-link link-dark itens-menu-slider 
+              ">
+              <img class="img-menu-slider" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iQ2FtYWRhXzEiIGRhdGEtbmFtZT0iQ2FtYWRhIDEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgODguMSAxMDAuNiI+CiAgPGRlZnM+CiAgICA8c3R5bGU+CiAgICAgIC5jbHMtMSB7CiAgICAgICAgc3Ryb2tlLXdpZHRoOiAwcHg7CiAgICAgIH0KICAgIDwvc3R5bGU+CiAgPC9kZWZzPgogIDxwb2x5Z29uIGNsYXNzPSJjbHMtMSIgZmlsbD0iI0MxNkMwMCIgcG9pbnRzPSI0MC4zIDQuNyA0MC4zIDEzLjIgNDkuOSAxMy4yIDQwLjMgNC43Ii8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBmaWxsPSIjQzE2QzAwIiBkPSJNNDIuNiw0NC41YzAtMS43LjMtMy40LjgtNWgtMjQuOWMtLjgtLjItMS40LTEtMS4zLTEuOS4yLS42LjYtMS4xLDEuMy0xLjNoMjYuM2MxLjMtMi4yLDMuMS00LjEsNS4yLTUuNVYxNC40aC0xMVY0LjZIMTQuNGwtLjUsNDYuMWgyOS45Yy0uOC0xLjktMS4yLTQtMS4yLTYuMlpNMTguMSwxMC42aDE1LjhjLjUsMCwxLC43LDEsMS42cy0uNSwxLjYtMSwxLjZoLTE1LjhjLS41LDAtMS0uNy0xLTEuNnMuNS0xLjYsMS0xLjZaTTE3LjEsMjIuNWMuMi0uNi42LTEuMSwxLjMtMS4zaDI2LjdjLjguMiwxLjQsMSwxLjMsMS45LS4yLjYtLjYsMS4xLTEuMywxLjNoLTI2LjdjLS44LS4yLTEuNC0xLTEuMy0xLjlaTTE3LjEsMzAuM2MuMi0uNi42LTEuMSwxLjMtMS4zaDI2LjdjLjguMiwxLjQsMS4xLDEuMywxLjktLjIuNi0uNiwxLjEtMS4zLDEuM2gtMjYuN2MtLjgtLjItMS40LTEtMS4zLTEuOVoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGZpbGw9IiNDMTZDMDAiIGQ9Ik0yOS42LDY3LjNjMC00LjItMy40LTcuNS03LjUtNy41cy03LjUsMy40LTcuNSw3LjUsMy40LDcuNSw3LjUsNy41LDcuNS0zLjQsNy41LTcuNVoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGZpbGw9IiNDMTZDMDAiIGQ9Ik0xMy4xLDc4LjloMGMtNC41LDEuMy04LjUsMy43LTguNSw3LjJ2Ni4zaDEwLjFjLS4zLTEuNi0uNy0zLjYtLjktNS42LS40LTMuMS0uNi02LjItLjYtNy45WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZmlsbD0iI0MxNkMwMCIgZD0iTTE5LjUsNzcuNGMtMS44LjItMy41LjUtNS4yLDEsMCwxLjYuMiw0LjguNiw4LjEuMywyLjEuNiw0LjIsMSw1LjhoNGMtLjQtMS42LS42LTMuMS0uNy00LjcsMC0yLjYuNy01LjIsMS43LTcuN2wtMS40LTIuNVoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGZpbGw9IiNDMTZDMDAiIGQ9Ik0yOS43LDc4LjVoLS4xYy0xLjgtLjUtMy42LS45LTUuNC0xLjFsLTEuNCwyLjVzLjQuOS44LDIuMmMxLjgtMS41LDMuOS0yLjgsNi4xLTMuNloiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGZpbGw9IiNDMTZDMDAiIGQ9Ik02Ni40LDU5LjhjLTQuMSwwLTcuNSwzLjQtNy41LDcuNXMzLjQsNy41LDcuNSw3LjUsNy41LTMuNCw3LjUtNy41LTMuNC03LjUtNy41LTcuNVoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGZpbGw9IiNDMTZDMDAiIGQ9Ik03NS42LDc4LjdoLjFjLTEuMS0uMi0zLjItMS00LjYtMS4zbC4zLDIuMS0yLjQtMi4zLTEuMywyLjgtLjUtLjctMS41LTIuMi0xLjcsMi4yLS41LTIuMmMtMS42LjMtMy4yLjgtNC44LDEuNCwyLC44LDMuOCwxLjksNS41LDMuMiwyLjQsMiwzLjcsNC4zLDMuNyw2Ljh2My44aDE2LjJ2LTYuM2MwLTMuNC00LTUuOC04LjUtNy4zWiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZmlsbD0iI0MxNkMwMCIgZD0iTTQzLjgsNTUuN2MtNC45LDAtOC44LDMuOS04LjgsOC44czAsMy41LS4zLDUuMmMtLjMsMS4xLS44LDIuMS0xLjUsMi45LDMuMywxLjYsNywyLjQsMTAuNywyLjMsMy43LDAsNy40LS44LDEwLjgtMi4zLTEtLjctMS42LTEuNy0xLjYtMi45aDBjLS4yLTEuNy0uMy0zLjUtLjQtNC40di0uOGMwLTQuOS0zLjktOC44LTguOC04LjhaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBmaWxsPSIjQzE2QzAwIiBkPSJNNTguOSw4MWgwYy0yLjYtMS4yLTUuMy0yLTguMS0yLjV2LjRjMCwzLjktMy4yLDcuMS03LjEsNy4xcy03LjEtMy4yLTcuMS03LjF2LS41Yy0zLjkuNy03LjcsMi4xLTExLDQuMy00LjEsMi44LTMuOCw2LjMtMy44LDYuM3Y3LjNoNDMuN3YtNy4zYzAtMy4xLTItNS43LTYuNy04WiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZmlsbD0iI0MxNkMwMCIgZD0iTTc5LjIsNjguOWMxLjEsMS4xLDMsLjgsNC4zLS41LDEuNC0xLjMsMS42LTMuMy41LTQuM2wtNy4zLTcuMy00LjcsNC45LDcuMiw3LjJaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBmaWxsPSIjQzE2QzAwIiBkPSJNNjkuOSw1NC44Yy0xLjMsMS4zLTEuNSwzLjMtLjQsNC4zbDEuMywxLjMsNC43LTQuOS0xLjItMS4yaDBjLTEuMS0xLjEtMy0uOC00LjMuNVoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGZpbGw9IiNDMTZDMDAiIGQ9Ik02Ni45LDQzLjNoMS4xYy0uNC0zLjItMi41LTYtNS40LTcuMmwtLjYsMS4xYzIuNSwxLDQuNCwzLjQsNC45LDYuMVoiLz4KICA8cGF0aCBjbGFzcz0iY2xzLTEiIGZpbGw9IiNDMTZDMDAiIGQ9Ik00NSw0NC4zYzAsNy44LDYuNCwxNC4yLDE0LjIsMTQuMnMxNC4yLTYuNCwxNC4yLTE0LjItNi40LTE0LjItMTQuMi0xNC4yLTE0LjIsNi40LTE0LjIsMTQuMlpNNTkuMSwzMi4xYzYuOCwwLDEyLjIsNS40LDEyLjIsMTIuMnMtNS41LDEyLjItMTIuMiwxMi4yLTEyLjItNS40LTEyLjItMTIuMiw1LjQtMTIuMiwxMi4yLTEyLjJaIi8+CiAgPHBhdGggY2xhc3M9ImNscy0xIiBmaWxsPSIjQzE2QzAwIiBkPSJNNjYuOCw0NC4zYzAsLjQsMCwuOCwwLDEuMWgxLjJ2LTEuNGgtMS4xdi4zWiIvPgogIDxwYXRoIGNsYXNzPSJjbHMtMSIgZmlsbD0iI0MxNkMwMCIgZD0iTTU5LjEsNTUuNGM2LjEsMCwxMS4xLTUsMTEuMS0xMS4xcy01LTExLjEtMTEuMS0xMS4xYy02LjEsMC0xMS4xLDUtMTEuMSwxMS4xczUsMTEuMSwxMS4xLDExLjFaTTU5LjEsMzQuNWM1LjQsMCw5LjgsNC40LDkuOCw5LjhzLTQuNCw5LjgtOS44LDkuOC05LjgtNC40LTkuOC05LjgsNC40LTkuOCw5LjgtOS44WiIvPgo8L3N2Zz4=" alt="" style="padding: 0 3px;">
+              <p class="text-item-mslider text-gray">Relação de Gestores e Fiscais de Contrato</p>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+</div>
+
+<div class="col-md-8 col-lg-9 col-xl-10">
+
+  
+<ol class="breadcrumb">
+Você está aqui &nbsp;<i class="glyphicon glyphicon-hand-right">   </i> &nbsp;
+<li><a href="https://transparencia.tceto.tc.br/">Pagina Inicial</a></li><li><a href="https://transparencia.tceto.tc.br/contrato/">Contratos</a></li><li><a href="https://transparencia.tceto.tc.br/contrato/Index/">Index</a></li></ol>
+<h1 class="page-header">Contratos</h1>
+<div class="panel panel-success">
+    <div class="panel-body">
+        <p>Contrato é o acordo recíproco de vontades que tem por fim gerar obrigações recíprocas entre os contratantes. 
+            Assim como o particular, o Poder Público celebra contratos no intuito de alcançar objetivos de interesse público.</p>
+        <p>No Tribunal de Contas do Estado do Tocantins, além de se obedecer ao descrito na Lei nº 8.666/93, a lei de licitações e contratos, 
+            o acompanhamento é realizado de acordo com o estabelecido na Resolução Administrativa nº 06/2007.</p>
+    </div>
+</div>
+
+<div class="bs-callout bs-callout-warning">
+    <form class="form-horizontal row" role="form" action="https://transparencia.tceto.tc.br/contrato" method="post">
+        <input type='hidden' name='ordem' value='pesq' size='15' >
+        <input type='hidden' name='pagina' value='1' size='15' >
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label for="gestora">Unidade Gestora: </label>
+                    <select class="form-control input-form-gest" id="gestora" name='gestora'>
+                        <option value="0">Todas</option>
+                          <option  value="2">FUNDO DE APERFEIÇOAMENTO PROFISSIONAL E REEQUIPAMENTO TÉCNICO DO TCE</option>    <option  value="1">TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS</option>                      </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label for="numero">Número: </label>
+                    <input type="text" class="form-control input-form-gest" id="numero"  name="numero" placeholder="Digite o número do contrato" value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label for="Ano">Ano: </label>
+                    <select class="form-control input-form-gest" id="Ano" name='Ano'>
+                        <option value="0">Todos</option>
+                          <option  value="2026">2026</option>    <option  value="2025">2025</option>    <option  value="2024">2024</option>    <option  value="2023">2023</option>    <option  value="2022">2022</option>    <option  value="2021">2021</option>    <option  value="2020">2020</option>    <option  value="2019">2019</option>    <option  value="2018">2018</option>    <option  value="2017">2017</option>    <option  value="2016">2016</option>    <option  value="2015">2015</option>    <option  value="2014">2014</option>    <option  value="2013">2013</option>    <option  value="2012">2012</option>    <option  value="2011">2011</option>    <option  value="2010">2010</option>                      </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label for="numero">Objeto: </label>
+                    <input type="text" class="form-control input-form-gest" id="obs"  name="obs" placeholder="Digite parte do objeto do contrato" value="">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label for="contratado">Contratada: </label>
+                    <input type="contratado" class="form-control input-form-gest" id="contratado"  name="contratado" placeholder="Digite o nome..." value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label for="tipocontrato">Finalidade: </label>
+                    <select class="form-control input-form-gest" id="tipocontrato" name='tipocontrato'>
+                        <option value="0">Todas</option>
+                          <option  value="5">AQUISIÇÃO</option>    <option  value="18">AQUISIÇÃO/SERVIÇOS</option>    <option  value="15">CANCELADO</option>    <option  value="12">CESSÃO</option>    <option  value="21">CONTINUIDADE DOS SERVIÇOS</option>    <option  value="13">CONTRATAÇÃO</option>    <option  value="6">FORNECIMENTO</option>    <option  value="17">LOCAÇÃO</option>    <option  value="37">MANUTENÇÃO</option>    <option  value="1">PRESTAÇÃO DE SERVIÇOS</option>    <option  value="22">REVOGADO</option>    <option  value="40">SERVIÇO COMUM DE ENGENHARIA</option>    <option  value="39">SERVIÇO DE ENGENHARIA</option>                      </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label for="situacao">Situação: </label>
+                    <select class="form-control input-form-gest" id="situacao" name='situacao'>
+                        <option value="0">Todas</option>
+                          <option  value="1">ENCERRADO</option>    <option  value="2">VIGENTE</option>                      </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-12 col-md-11">
+                    <label for="valorInicial">Valor: </label>
+                    <div class="form-group row ps-3">
+                        <label for="" class="col-1 col-form-label pe-0 pt-3" style="font-size: 12px;">De</label>
+                        <div class="col-5 pe-0 ps-1">
+                            <input type="number" step='0.01' placeholder='0,00' name="valorInicial" class="form-control input-form-gest px-2" value="">
+                        </div>
+                        <label for="" class="col-1 col-form-label p-1 pt-3" style="font-size: 12px;">até</label>
+                        <div class="col-5 ps-0 pe-4">
+                            <input type="number" step='0.01' placeholder='0,00' name="valorFinal" class="form-control input-form-gest px-2" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label for="modalidade">Modalidade: </label>
+                    <select class="form-control input-form-gest" id="modalidade" name='modalidade'>
+                        <option value="0">Todas</option>
+                          <option  value="37">ATA DE REGISTRO DE PREÇOS</option>    <option  value="23">CARONA</option>    <option  value="4">CONCORRÊNCIA</option>    <option  value="32">CREDENCIAMENTO</option>    <option  value="7">DISPENSA DE LICITAÇÃO</option>    <option  value="8">INEXIGIBILIDADE</option>    <option  value="10">PREGÃO ELETRÔNICO</option>    <option  value="30">PREGÃO ELETRÔNICO - ATA</option>    <option  value="29">PREGAO ELETRÔNICO - ATA - CONTRATO</option>    <option  value="38">Pregão Eletrônico SRP - Órgão Participante</option>    <option  value="18">PREGÃO PRESENCIAL</option>    <option  value="31">PREGÃO PRESENCIAL - ATA</option>    <option  value="11">PREGÃO PRESENCIAL CREDENCIAMENTO</option>    <option  value="22">PREGÃO PRESENCIAL REGISTRO DE PREÇO</option>    <option  value="13">TOMADA DE PREÇO - MENOR PREÇO</option>                      </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label>Vigência Inicial do Contrato: </label>
+                    <input class="form-control input-form-gest" autocomplete="off" id="dtinicio" type="text" name="dtinicio" placeholder="Ex.: 09/05/2026" value="">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 col-md-8">
+                    <label>Vigência Final do Contrato: </label>
+                    <input class="form-control input-form-gest" autocomplete="off" id="dtfim" type="text" name="dtfim" placeholder="Ex.: 09/05/2026" value="">
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12 text-end">
+                <a href="https://transparencia.tceto.tc.br/contrato" role="button" aria-pressed="true">
+                    <button class="button-form-link button-decoration" type="button">
+                        <div class="buttons-form bg-gray">
+                            <img src="https://transparencia.tceto.tc.br/public/images/icons/icone-botao-limpar.svg" alt="">
+                            <p class="text-button">Limpar</p>
+                        </div>
+                    </button>
+                </a>
+                <button class="button-form-link button-decoration" id="buscar" type="submit">
+                    <div class="buttons-form bg-blue">
+                        <img src="https://transparencia.tceto.tc.br/public/images/icons/icon-awesome-search-plus.svg" alt="">
+                        <p class="text-button">Buscar Registros</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="d-flex justify-content-md-end justify-content-center align-items-center mb-3">
+    <p class="text-muted mb-0 text-md-end text-center" style="font-size: 14px;">
+        <i class="bi bi-clock me-2"></i>
+        <strong>Última atualização:</strong>
+        <span class="text-secondary ms-1" style="font-size: 15px;">
+            30/04/2026        </span>
+    </p>
+</div>
+
+<div class="row mb-5">
+    <div class="col-sm-12">
+        <div class="tabbable-panel">
+            <div class="tabbable-line">
+                <ul class="nav nav-tabs ">
+                    <li class="active"> <a href="#tab_default_1" data-toggle="tab"> Resultado da consulta em Tabela</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_default_1">
+    <div id="page-wrap">
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>Número/Ano</th>
+                    <th>Descrição</th>
+                    <th>Situação</th>
+                    <th width="15%">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                                        <tr>
+                            <td><h4><span class='label label-success'>027/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de empresa especializada para a prestação de serviços de manutenção preventiva e corretiva, com fornecimento de peças, componentes, materiais e mão de obra necessária, nos veículos da frota oficial do Tribunal de Contas do Estado do Tocantins ? TCE/TO. <br>
+                                <strong>Vigência do Contrato: </strong>29/04/2027 <br>
+                                <strong>Valor do Contrato: </strong>53.000,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/10262"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>026/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>AQUISIÇÃO<br>
+                                <strong>Objeto: </strong>Aquisição de tela de projeção motorizada, destinada à estruturação dos espaços de capacitação, reuniões e eventos institucionais do Instituto de Contas. <br>
+                                <strong>Vigência do Contrato: </strong>31/12/2026 <br>
+                                <strong>Valor do Contrato: </strong>1.370,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/10260"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>025/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>INEXIGIBILIDADE<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de empresa especializada para fornecer o software SophiA Gestão Acadêmica (SGA) em cessão definitiva, incluindo implantação, migração de dados, treinamento presencial, manutenção, suporte técnico por 12 meses e atualização do ambiente Moodle, para atender às necessidades de gestão acadêmica, administrativa e educacional do Instituto de Contas (ISCON) do Tribunal de Contas do Estado do Tocantins. <br>
+                                <strong>Vigência do Contrato: </strong>29/04/2027 <br>
+                                <strong>Valor do Contrato: </strong>260.300,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/10261"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>024/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>PREGÃO ELETRÔNICO<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de instituição financeira, autorizada pelo Banco Central do Brasil, para prestação de serviços de pagamento da folha salarial em sua totalidade e outras indenizações aos servidores e membros ativos do Tribunal de Contas do Estado do Tocantins, bem como ao programa de bolsa de estagiários instituído no âmbito desta Corte de Contas, além de outros conforme comando do Tribunal, doravante denominados beneficiários. <br>
+                                <strong>Vigência do Contrato: </strong>08/07/2031 <br>
+                                <strong>Valor do Contrato: </strong>2.500.000,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/10259"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>023/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de empresa especializada na emissão/renovação de certificado digital do tipo e-Servidor, destinado ao domínio ws.tceto.tc.br. <br>
+                                <strong>Vigência do Contrato: </strong>10/04/2029 <br>
+                                <strong>Valor do Contrato: </strong>4.100,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9258"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>022/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>PREGÃO ELETRÔNICO<br>
+                                <strong>Finalidade: </strong>AQUISIÇÃO<br>
+                                <strong>Objeto: </strong>O objeto do presente instrumento é a aquisição de equipamentos de internet via satélite Starlink, incluindo antenas, roteadores e acessórios necessários. <br>
+                                <strong>Vigência do Contrato: </strong>08/04/2027 <br>
+                                <strong>Valor do Contrato: </strong>40.500,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9255"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>021/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>PREGÃO ELETRÔNICO<br>
+                                <strong>Finalidade: </strong>AQUISIÇÃO<br>
+                                <strong>Objeto: </strong>O objeto do presente instrumento é a aquisição de equipamentos de internet via satélite Starlink, incluindo antenas, roteadores e acessórios necessários. <br>
+                                <strong>Vigência do Contrato: </strong>08/04/2027 <br>
+                                <strong>Valor do Contrato: </strong>2.700,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9254"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>020/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de serviços gerenciados de computação em nuvem, sob o modelo de cloud broker (integrador) de multinuvem, por meio da solução SERPRO Multicloud, incluindo a disponibilização de infraestrutura, o acesso a serviços especializados de computação em nuvem e inteligência artificial, bem como o suporte técnico necessário. <br>
+                                <strong>Vigência do Contrato: </strong>07/04/2027 <br>
+                                <strong>Valor do Contrato: </strong>998.280,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9257"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>019/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>AQUISIÇÃO<br>
+                                <strong>Objeto: </strong>Aquisição de eletrodomésticos para atender as necessidades do Laboratório de Pavimentação do IFTO. <br>
+                                <strong>Vigência do Contrato: </strong>31/12/2026 <br>
+                                <strong>Valor do Contrato: </strong>4.090,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9256"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>018/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>INEXIGIBILIDADE<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de serviço educacional para a realização da palestra presencial, com carga horária de 1h30min, no âmbito do ?2º Encontro de Vereadores e Servidores das Câmaras Municipais do Tocantins?, destinada a vereadores e servidores das câmaras municipais, com o objetivo de promover conhecimentos sobre instrumentos de planejamento e gestão pública, contribuindo para o aprimoramento da atuação dos agentes públicos, o fortalecimento da transparência e a efetividade do controle da administração pública. <br>
+                                <strong>Vigência do Contrato: </strong>31/12/2026 <br>
+                                <strong>Valor do Contrato: </strong>15.000,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9250"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>017/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>INEXIGIBILIDADE<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de serviço educacional para a realização da palestra presencial, com carga horária de 2 (duas) horas, no âmbito do ?2º Encontro de Vereadores e Servidores das Câmaras Municipais do Tocantins?, destinada a vereadores e servidores das câmaras municipais, abordando temas relacionados à estratégia política, comunicação institucional, fortalecimento de mandatos e captação de recursos para políticas públicas, visando contribuir para o aprimoramento da atuação institucional e da gestão pública municipal. <br>
+                                <strong>Vigência do Contrato: </strong>31/12/2026 <br>
+                                <strong>Valor do Contrato: </strong>12.500,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9251"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>016/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação, por meio de contrato estimativo, de restaurante com funcionamento diário nos períodos diurno e noturno, localizado na cidade de Palmas/TO, para o fornecimento de refeições (almoço e/ou jantar), tipo à la carte. <br>
+                                <strong>Vigência do Contrato: </strong>12/03/2027 <br>
+                                <strong>Valor do Contrato: </strong>16.000,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9249"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>015/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>INEXIGIBILIDADE<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação dos serviços de manutenção da cessão de uso do Sistema SophiA Biblioteca, nº série 3785. <br>
+                                <strong>Vigência do Contrato: </strong>10/03/2027 <br>
+                                <strong>Valor do Contrato: </strong>8.818,56 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9248"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>014/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de empresa especializada para o fornecimento de sistema de atendimento digital multicanal, com atendimento humano e automatizado por meio de inteligência artificial generativa, na modalidade SaaS (Software as a Service), com integração às plataformas oficiais de mensageria, tais como o WhatsApp Business API (BSP), incluindo os serviços de implantação, configuração, treinamento e suporte técnico. <br>
+                                <strong>Vigência do Contrato: </strong>06/05/2026 <br>
+                                <strong>Valor do Contrato: </strong>15.900,00 
+                            </td>
+                            <td> <h5><span class='label  label-danger '>ENCERRADO</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9247"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>013/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>FUNDO DE APERFEIÇOAMENTO PROFISSIONAL E REEQUIPAMENTO TÉCNICO DO TCE <br>
+                                <strong>Modalidade: </strong>PREGAO ELETRÔNICO - ATA - CONTRATO<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de empresa especializada para realização da atualização tecnológica (tech refresh) da solução de armazenamento NetApp FAS2750, mediante fornecimento e instalação de novas controladoras NetApp FAS70, incluindo licenciamento ONTAP One, renovação de suporte técnico com garantia de 60 (sessenta) meses e execução dos serviços de implementação. <br>
+                                <strong>Vigência do Contrato: </strong>05/03/2028 <br>
+                                <strong>Valor do Contrato: </strong>3.754.000,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9246"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>012/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>AQUISIÇÃO<br>
+                                <strong>Objeto: </strong>Aquisição de troféus contendo o Selo Município Amigo do Futuro, referente à Quinta Etapa do Programa TCE de Olho no Futuro ? Aliança pela Primeira Infância. <br>
+                                <strong>Vigência do Contrato: </strong>03/03/2027 <br>
+                                <strong>Valor do Contrato: </strong>15.200,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9245"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>011/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>INEXIGIBILIDADE<br>
+                                <strong>Finalidade: </strong>CONTRATAÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de licenças de uso, em modelo Software as a Service (SaaS) Contex Controle, de solução de Inteligência Artificial aplicada à auditoria e ao controle externo, incluindo serviços de integração com os sistemas SICAP e e-Contas, treinamento de usuários e suporte técnico continuado, visando à automação, padronização e aprimoramento dos processos de auditoria do Tribunal de Contas do Estado do Tocantins. <br>
+                                <strong>Vigência do Contrato: </strong>25/02/2027 <br>
+                                <strong>Valor do Contrato: </strong>71.760,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9241"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>010/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>FUNDO DE APERFEIÇOAMENTO PROFISSIONAL E REEQUIPAMENTO TÉCNICO DO TCE <br>
+                                <strong>Modalidade: </strong>PREGAO ELETRÔNICO - ATA - CONTRATO<br>
+                                <strong>Finalidade: </strong>AQUISIÇÃO<br>
+                                <strong>Objeto: </strong>Contratação de licenciamento do sistema operacional Microsoft Windows Server Datacenter em sua versão mais atual conforme segmentação e quantificação apresentada no contrato. <br>
+                                <strong>Vigência do Contrato: </strong>24/02/2027 <br>
+                                <strong>Valor do Contrato: </strong>790.800,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9239"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>009/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>AQUISIÇÃO<br>
+                                <strong>Objeto: </strong>Aquisição de aplicativos para edição de vídeo, webdesign e layout online.. <br>
+                                <strong>Vigência do Contrato: </strong>26/02/2027 <br>
+                                <strong>Valor do Contrato: </strong>17.170,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9242"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                                <tr>
+                            <td><h4><span class='label label-success'>008/2026</span></h4></td>
+                            <td>
+                                <strong>Unidade Gestora: </strong>TRIBUNAL DE CONTAS DO ESTADO DO TOCANTINS <br>
+                                <strong>Modalidade: </strong>DISPENSA DE LICITAÇÃO<br>
+                                <strong>Finalidade: </strong>AQUISIÇÃO<br>
+                                <strong>Objeto: </strong>Aquisição de licença de 1 (um) ano do software de modelagem 3D SketchUp Pro versão 2026. <br>
+                                <strong>Vigência do Contrato: </strong>24/02/2027 <br>
+                                <strong>Valor do Contrato: </strong>2.122,00 
+                            </td>
+                            <td> <h5><span class='label  label-success '>VIGENTE</span></h5></td>
+                            <td><h5> <strong><a href="https://transparencia.tceto.tc.br/contrato/details/9240"><i class=" glyphicon glyphicon-search"></i> Mais Informações</a></strong></h5> </td>
+                        </tr>
+                                    </tbody>
+        </table>
+    </div>
+    <div class="row text-center text-md-left ps-md-3">
+        <div class=""><strong> Exibindo 1 de 20 de um total de 1191 registros </strong></div>    </div>
+    <div class="row">
+        <div class="col-md-12 col-pag-left mt-lg-4 text-center text-md-left text-lg-left ps-3 p-0">
+        <a href="https://transparencia.tceto.tc.br/contrato/exportExcel?dadosfilter=YTozOntzOjY6ImluaWNpbyI7aToxO3M6MzoiZmltIjtpOjIwO3M6MTI6ImJvb2xjb250cmF0byI7aToxO30=">
+            <button class="button-form-link button-decoration" id="excel">
+                <div class="buttons-form bg-green">
+                    <img src="https://transparencia.tceto.tc.br//public/images/icons/icon-awesome-file-excel.svg" alt="">
+                    <p class="text-button">Exportar Excel</p>
+                </div>
+            </button>
+        </a>
+        <a href="https://transparencia.tceto.tc.br/contrato/DownloadCsv?dadosfilter=YTozOntzOjY6ImluaWNpbyI7aToxO3M6MzoiZmltIjtpOjIwO3M6MTI6ImJvb2xjb250cmF0byI7aToxO30=">
+            <button class="button-form-link button-decoration" id="csv">
+                <div class="buttons-form bg-orange">
+                    <img src="https://transparencia.tceto.tc.br//public/images/icons/icon-awesome-file-csv.svg" alt="">
+                    <p class="text-button">Exportar CSV</p>
+                </div>
+            </button>
+        </a>
+        <a href="https://transparencia.tceto.tc.br/contrato/exportImprimir?dadosfilter=YTozOntzOjY6ImluaWNpbyI7aToxO3M6MzoiZmltIjtpOjIwO3M6MTI6ImJvb2xjb250cmF0byI7aToxO30=" target="_blank">
+            <button class="button-form-link button-decoration" id="csv">
+                <div class="buttons-form bg-red">
+                    <img src="https://transparencia.tceto.tc.br//public/images/icons/icon-awesome-print.svg" alt="">
+                    <p class="text-button">Imprimir</p>
+                </div>
+            </button>
+        </a>
+        </div>
+        <div class="col-md-12 col-pag-right text-lg-right text-center  text-md-right">
+            <form class="" role="form" action="https://transparencia.tceto.tc.br/contrato" method="post">
+                <input type='hidden' id="filterpesquisa" name='dadosfilter' value='YTozOntzOjY6ImluaWNpbyI7aToxO3M6MzoiZmltIjtpOjIwO3M6MTI6ImJvb2xjb250cmF0byI7aToxO30=' >
+                <input type='hidden' name='ordem' value='pesq' size='15' >
+                <input type='hidden' name='total' value='1191' size='15' >
+                
+                <nav><ul class="pagination"><li><button class="btn btn-default  prev disabled">&laquo;<span class="d-none d-sm-inline"> Primeira</span></button></li>
+                <li class="d-none d-sm-inline"><button class="btn btn-default  prev disabled">&laquo;<span class="d-none d-lg-inline"> Anterior</span></button></li>  <li><button class="btn btn-default  next disabled  " value="1"  name="pagina"> 1</button></li>  <li><button class="btn btn-primary  " value="2"  name="pagina"> 2</button></li>  <li><button class="btn btn-primary  " value="3"  name="pagina"> 3</button></li> <li class="d-none d-sm-inline"><button class="btn btn-primary" value="2"  name="pagina"><span class="d-none d-lg-inline"> Pr&oacute;xima</span> &raquo;</button></li>
+                <li><button class="btn btn-primary" value="60"  name="pagina"><span class="d-none d-sm-inline">  &Uacute;ltima</span>  &raquo;</button></li></ul></nav>            </form>
+        </div>
+    </div>
+</div>                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div><footer>
+  <div class="footer-atalhos">
+    <a href="#inicioFooter" id="inicioFooter" accesskey="4"> </a>
+    <div class="container">
+      <div class="pull-right voltar-ao-topo"><a href="#portal-siteactions"><i class="icon-chevron-up"></i>&nbsp;Voltar para o topo do site</a></div>
+    </div>
+  </div>
+  <span class="spacer"></span>
+  <span class="spacer"></span>
+  <div id="bg-footer" class="container-fluid bg-footer border-top">
+    <footer class="py-5 container">
+      <div class="row pb-3">
+        <div class="col">
+          <h5 class="title-footer">Informações Institucionais</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="sic-gov-digital">
+                <input type="hidden" name="url" value="https://www.tceto.tc.br/cartadeservicos/">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Carta de Serviços</p>
+                </button>
+              </form>
+            </li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/home/competencia" class="nav-link p-0 item-footer">Competência</a>
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="contatos">
+                <input type="hidden" name="url" value="https://www.tceto.tc.br/contatos/">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Contatos</p>
+                </button>
+              </form>
+            </li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/home/estrutura" class="nav-link p-0 item-footer">Estrutura Organizacional</a>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/home/identidade" class="nav-link p-0 item-footer">Identidade Organizacional</a>
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="planos-estrategicos">
+                <input type="hidden" name="url" value="https://www.tceto.tc.br/categorias_publicacoes/planos-estrategicos/">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Planos Estratégicos</p>
+                </button>
+              </form>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <h5 class="title-footer">COMPRAS E LICITAÇÕES</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/licitacao" class="nav-link p-0 item-footer">Licitações</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/contratacao" class="nav-link p-0 item-footer">Dispensas e Inexigibilidades</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/ata" class="nav-link p-0 item-footer">Atas de Registro de Preço</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/contrato" class="nav-link p-0 item-footer">Contratos</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/convenio" class="nav-link p-0 item-footer">Convênios e Instrumentos Congêneres</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/contratacaoanual" class="nav-link p-0 item-footer">Plano de Contratação Anual - PCA</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/licitantesEContratadosSancionados" class="nav-link p-0 item-footer">Licitantes e/ou contratados sancionados</a>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/relacaoDeGestoresEFiscaisDeContrato" class="nav-link p-0 item-footer">Relação de Gestores e Fiscais de Contrato</a>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5 class="title-footer">OBRAS</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/obraseservicosdeengenharia" class="nav-link p-0 item-footer">Obras e Serviços de Engenharia</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/obrasparalisadas" class="nav-link p-0 item-footer">Obras Paralisadas</a></li>
+
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5 class="title-footer">RECURSOS HUMANOS</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/quadroservidor" class="nav-link p-0 item-footer">Quadro de Servidores</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/cargocomissionado" class="nav-link p-0 item-footer">Cargos Comissionados e Funções</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/tabremuneratoria" class="nav-link p-0 item-footer">Cargos Efetivos</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/folhapagamento" class="nav-link p-0 item-footer">Folha de Pagamento - Membros e Servidores</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/folhapagamentoestagiario" class="nav-link p-0 item-footer">Folha de Pagamento - Estagiários</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/editaisDeConcursoSelecoesPublicas" class="nav-link p-0 item-footer">Editais de Concursos e Seleções Públicas</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/demaisAtosConcursosPublicosProcessosSeletivos" class="nav-link p-0 item-footer">Demais Atos dos Concursos Públicos e Processos Seletivos</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/terceirizados" class="nav-link p-0 item-footer">Terceirizados</a></li>
+          </ul>
+        </div>
+
+        <!-- <div class="col">
+          <h5 class="title-footer">ORÇAMENTO</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="orcamento/leisOrcamentarias" class="nav-link p-0 item-footer">Leis Orçamentárias</a></li>
+            <li class="nav-item mb-2"><a href="orcamento/receitaPrevista" class="nav-link p-0 item-footer">Receitas Previstas</a></li>
+            <li class="nav-item mb-2"><a href="orcamento/despesaFixada" class="nav-link p-0 item-footer">Despesas Fixadas</a></li>
+          </ul>
+        </div> -->
+
+        <div class="col">
+          <h5 class="title-footer">RECEITAS E DESPESAS</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/empenho" class="nav-link p-0 item-footer">Empenhos</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/liquidacao" class="nav-link p-0 item-footer">Liquidações</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/pagamento" class="nav-link p-0 item-footer">Pagamentos</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/diaria" class="nav-link p-0 item-footer">Diárias</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/gastosCombustivel" class="nav-link p-0 item-footer">Gastos com Combustível</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/receitaArrecadada" class="nav-link p-0 item-footer">Receitas</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/informacoesConsolidadas" class="nav-link p-0 item-footer">Informações Consolidadas</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/restosPagar" class="nav-link p-0 item-footer">Informações Consolidadas - Restos a Pagar</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/pagamentosOrdemCronologica" class="nav-link p-0 item-footer">Ordem Cronológica de Pagamentos até Junho de 2023</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/execucaoOrcamentaria/pagamentosOrdemCronologicaApartirJulho2023" class="nav-link p-0 item-footer">Ordem Cronológica de Pagamentos a Partir de Julho de 2023</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/orcamento/leisOrcamentarias" class="nav-link p-0 item-footer">Leis Orçamentárias</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/orcamento/despesaFixada" class="nav-link p-0 item-footer">Despesas Fixadas</a></li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5 class="title-footer">PRESTAÇÃO DE CONTAS E LRF</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/balancocontabil" class="nav-link p-0 item-footer">Demonstrativos Contábeis</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/lrf" class="nav-link p-0 item-footer">Relatórios - LRF</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/prestacoes/processos" class="nav-link p-0 item-footer">Prestações de Contas</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/prestacoes/decisoes" class="nav-link p-0 item-footer">Decisões</a></li>
+          </ul>
+        </div>
+
+
+      </div>
+
+      <div class="row pb-3">
+        <div class="col">
+          <h5 class="title-footer">JURISPRUDÊNCIA</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="informativo">
+                <input type="hidden" name="url" value="https://www.tceto.tc.br/informativo-de-jurisprudencia/">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Informativo de Jurisprudência</p>
+                </button>
+              </form>
+            </li>
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="consulta">
+                <input type="hidden" name="url" value="https://app.tceto.tc.br/jurisprudencia/publico/app/index.php">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Consulta Pública de Jurisprudência</p>
+                </button>
+              </form>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5 class="title-footer">RELATÓRIO DE ATIVIDADES</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/atividades/anuais" class="nav-link p-0 item-footer">Relatórios Anuais</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/atividades/trimestrais" class="nav-link p-0 item-footer">Relatórios Trimestrais</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/atividades/corregedoria" class="nav-link p-0 item-footer">Relatórios da Corregedoria</a></li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5 class="title-footer">ATIVIDADES FINALÍSTICAS</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/home/sessoes" class="nav-link p-0 item-footer">Vídeos das Sessões Plenárias</a></li>
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="pauta">
+                <input type="hidden" name="url" value="https://www.tceto.tc.br/pautas-das-sessoes/">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Pautas das Sessões</p>
+                </button>
+              </form>
+            </li>
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="atasessao">
+                <input type="hidden" name="url" value="https://www.tceto.tc.br/atas-das-sessoes-plenarias/">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Atas das Sessões</p>
+                </button>
+              </form>
+            </li>
+
+            <li class="nav-item mb-2">
+
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="decisoes-do-tce-2">
+                <input type="hidden" name="url" value="https://www.tceto.tc.br/decisoes-do-tce-2">
+                <button class="button-decoration p-0" type="submit">
+
+
+                  <p class="nav-link p-0 item-footer">Decisões do TCE</p>
+
+                </button>
+              </form>
+
+            </li>
+
+            <li class="nav-item mb-2">
+
+              <a class="nav-link p-0 item-footer" href="https://transparencia.tceto.tc.br/responsavelcontasjulgadasirregulares">
+
+                Responsável por Contas Julgadas Irregulares
+
+              </a>
+
+            </li>
+            <li class="nav-item mb-2">
+
+              <a class="nav-link p-0 item-footer" href="https://transparencia.tceto.tc.br/fiscalizacao/publicos">
+
+                Inspeções, Auditorias e Tomadas de Contas
+
+              </a>
+
+            </li>
+            <li class="nav-item mb-2">
+
+              <a class="nav-link p-0 item-footer" href="https://transparencia.tceto.tc.br/debitosemultas">
+
+                Débitos e Multas
+
+              </a>
+
+            </li>
+
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5 class="title-footer">OUVIDORIA</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="ouvidoriasite">
+                <input type="hidden" name="url" value="https://ouvidoria.tceto.tc.br/">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Site da Ouvidoria</p>
+                </button>
+              </form>
+            </li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/ouvidoria/relatorio" class="nav-link p-0 item-footer">Relatórios da Ouvidoria</a></li>
+          </ul>
+        </div>
+
+        <div class="col">
+          <h5 class="title-footer">SIC - SERVIÇO DE INFORMAÇÃO AO CIDADÃO</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/sic/sobre" class="nav-link p-0 item-footer">Sobre o SIC</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/sic/relatorio" class="nav-link p-0 item-footer">Relatórios e Dados</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/sic/manuais" class="nav-link p-0 item-footer">Manuais e Orientações</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/sic/dados" class="nav-link p-0 item-footer">Dados Estatísticos</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/sic/documentosClassificadosEmGrauDeSigilo" class="nav-link p-0 item-footer">Documentos Classificados em Grau de Sigilo</a>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/sic/informacoesDesclassificadas" class="nav-link p-0 item-footer">Informações Desclassificadas</a>
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="legislacao">
+                <input type="hidden" name="url" value="https://transparencia.tceto.tc.br/public/docs/IN_8_2012.pdf">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Legislação</p>
+                </button>
+              </form>
+            </li>
+
+
+          </ul>
+        </div>
+        <div class="col">
+          <h5 class="title-footer">LGPD E GOVERNO DIGITAL</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="https://www.tceto.tc.br/lgpd/" target="_blank" class="nav-link p-0 item-footer">LGPD – Lei Geral de Proteção de Dados
+                Pessoais</a></li>
+            <li class="nav-item mb-2"><a href="https://www.tceto.tc.br/cartadeservicos/" target="_blank" class="nav-link p-0 item-footer">Acesso a Serviços Públicos por Meio
+                Digital</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/pesquisadesatisfacao" class="nav-link p-0 item-footer">Pesquisa de Satisfação</a></li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/lgpd/dadosAbertos" class="nav-link p-0 item-footer">Dados Abertos</a></li>
+            <li class="nav-item mb-2"><a href="https://www.tceto.tc.br/tce-to-e-o-governo-digital/" target="_blank" class="nav-link p-0 item-footer">Governo Digital</a></li>
+
+          </ul>
+        </div>
+        <div class="col">
+          <h5 class="title-footer">DEMAIS INFORMAÇÕES</h5>
+          <ul class="nav flex-column">
+
+            <li class="nav-item mb-2">
+              <form method="post" action="https://transparencia.tceto.tc.br/contador" target="_blank">
+                <input type="hidden" name="identificador" value="atos">
+                <input type="hidden" name="url" value="https://app.tceto.tc.br/scl/publico/app/">
+                <button class="button-decoration p-0" type="submit">
+                  <p class="nav-link p-0 m-0 item-footer text-left">Atos Normativos</p>
+                </button>
+              </form>
+            </li>
+            <li class="nav-item mb-2"><a href="https://transparencia.tceto.tc.br/patrimonio/relatorios" class="nav-link p-0 item-footer">Patrimônio e Almoxarifado</a></li>
+          </ul>
+        </div>
+
+
+
+      </div>
+
+    </footer>
+  </div>
+
+  <div id="footer-info" class="container-fluid footer-info">
+    <div class="container mb-5 pt-5">
+      <div class="row">
+        <div class="col-12 col-md-4 item-set-footer">
+          <div class="section-logo">
+            <a target="_blank" href="https://www.tceto.tc.br/" class="d-flex align-items-center mb-3 mb-lg-0 text-dark text-decoration-none">
+              <img src="https://transparencia.tceto.tc.br/public/images/icon-tce.png" alt="Logo">
+            </a>
+            <div id="text-logo" class="text-logo">
+              <h1 class="title-logo">Tribunal de Contas</h1>
+              <span class="description-logo">do Estado do Tocantins</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-7">
+          <p class="text-footer-info">
+            <b>Tribunal de Contas do Estado do Tocantins</b> <br>
+            Av. Joaquim Teotônio Segurado, 102 Norte, Cj. 01, Lts 01 e 02 - Plano Diretor Norte <br>
+            Cep: 77.006-002 - Caixa postal 06 <br>
+            Fone: (63) 3232-5800- Expediente de Segunda a Sexta-feira, das 9h às 12h e das 14h às 18h.
+          </p>
+        </div>
+
+        <div class="col-12 col-md-1 logo-sic item-set-footer">
+          <a target="_blank" href="https://www.tceto.tc.br/sic-servico-de-informacao-ao-cidadao/" class="text-decoration-none">
+            <img src="https://transparencia.tceto.tc.br/public/images/sic.png" alt="">
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pre-loader-requests" style="width:100%; text-align: center;">
+    <!--    <h3 class="text-center" ><br/><br/>Aguarde...</h3>-->
+  </div>
+
+  <style>
+    .pre-loader-requests {
+      text-align: center;
+      display: none;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.8) url("/images/spinner2.gif") center no-repeat;
+    }
+
+    /* Turn off scrollbar when body element has the loading class */
+    body.loading {
+      overflow: hidden;
+    }
+
+    /* Make spinner image visible when body element has the loading class */
+    body.loading .pre-loader-requests {
+      display: block;
+      text-align: center;
+    }
+  </style>
+</footer>
+</div>
+<!--  JavaScript ================================================== -->
+<script type="text/javascript" src="https://transparencia.tceto.tc.br/public/js/jquery.js"></script>
+<script type="text/javascript" src="https://transparencia.tceto.tc.br/public/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://transparencia.tceto.tc.br/public/js/jquery_cookie.js"></script>
+<script type="text/javascript" src="https://transparencia.tceto.tc.br/public/flot/jquery.flot.min.js"></script><script type="text/javascript" src="https://transparencia.tceto.tc.br/public/flot/jquery.flot.symbol.min.js"></script><script type="text/javascript" src="https://transparencia.tceto.tc.br/public/flot/jquery.flot.axislabels.js"></script><script type="text/javascript" src="https://transparencia.tceto.tc.br/public/flot/jquery.flot.time.min.js"></script><script type="text/javascript" src="https://transparencia.tceto.tc.br/public/js/bootstrap-datepicker.js"></script><script type="text/javascript" src="https://transparencia.tceto.tc.br/public/js/bootstrap-datepicker.pt-BR.js"></script><script type="text/javascript" src="https://transparencia.tceto.tc.br/views/contrato/js/grafico.js"></script><script type="text/javascript" src="https://transparencia.tceto.tc.br/public/js/js-acessibilidade.js"></script>
+</body>
+
+</html>

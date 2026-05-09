@@ -87,11 +87,11 @@ export function collectDlPairs($: cheerio.CheerioAPI): Map<string, string> {
       .children()
       .each((_, child) => {
         const tag = (child as any).name;
-        const text = cleanWhitespace($(child).text()).replace(/:\s*$/, "");
+        const raw = cleanWhitespace($(child).text());
         if (tag === "dt") {
-          currentKey = text.toLowerCase();
+          currentKey = raw.replace(/\s*:\s*$/, "").toLowerCase();
         } else if (tag === "dd" && currentKey) {
-          if (!map.has(currentKey)) map.set(currentKey, text);
+          if (!map.has(currentKey)) map.set(currentKey, raw);
           currentKey = null;
         }
       });
