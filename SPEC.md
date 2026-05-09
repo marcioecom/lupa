@@ -61,6 +61,12 @@ Referencia: `src/scraper/parsers/licitacao-list.ts` -> `parsePaginationForm` e `
 
 > Validado em ambiente real com `pnpm scrape:licitacao --limit 25 --skip-details`: 2 paginas, 25 registros, navegacao `pagina=1 -> pagina=2` funciona e traz registros mais antigos (de 2024-2025) na pagina 2.
 
+## Performance da carga
+
+A fase de DB usa `INSERT ... ON CONFLICT (external_id) DO UPDATE` em chunks (CHUNK_SIZE=500), uma unica `SELECT` para descobrir o que ja existe, particionamento em memoria (insert/update/unchanged), `UPDATE` em massa para os unchanged e bulk `DELETE` + bulk `INSERT` chunked para as 4 tabelas filhas. Tudo dentro de uma transacao unica.
+
+Os fetches HTTP de detalhe sao paralelizados via worker pool (`pMap`) com `SCRAPER_CONCURRENCY=4` por padrao. Sem `delay` interno - a concorrencia limitada controla a taxa.
+
 ## TODOs conhecidos
 - Busca full-text sem acento no Postgres (carrega extensao `unaccent` ou ajusta dicionario). Hoje so casa com acento ("manutenção" sim, "manutencao" nao).
 - Scraper de contratos (proxima iteracao).

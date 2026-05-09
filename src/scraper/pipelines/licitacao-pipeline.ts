@@ -1,5 +1,5 @@
 import { setTimeout as delay } from "node:timers/promises";
-import { eq } from "drizzle-orm";
+import { eq, inArray, sql } from "drizzle-orm";
 import pino from "pino";
 import { config } from "../../config";
 import { type Db, getDb, schema } from "../../db/client";
@@ -17,6 +17,8 @@ const logger = pino({
   level: config.LOG_LEVEL,
   transport: { target: "pino-pretty", options: { colorize: true } },
 });
+
+const CHUNK_SIZE = 500;
 
 export type RunOptions = {
   limit?: number;
@@ -75,6 +77,7 @@ async function execute(db: Db, runId: number, options: RunOptions): Promise<RunS
     pagesScraped: collected.pagesScraped,
     recordsSeen: collected.recordsSeen,
     sourceLastUpdate: collected.firstPage?.sourceLastUpdate ?? null,
+    skipDetails: options.skipDetails ?? false,
   });
 }
 
@@ -181,6 +184,13 @@ type ApplyContext = {
   pagesScraped: number;
   recordsSeen: number;
   sourceLastUpdate: string | null;
+  skipDetails: boolean;
+};
+
+type Prepared = {
+  item: EnrichedItem;
+  merged: ReturnType<typeof mergeListAndDetail>;
+  hash: string;
 };
 
 async function applyToDb(
@@ -189,6 +199,9 @@ async function applyToDb(
   enriched: EnrichedItem[],
   ctx: ApplyContext,
 ): Promise<RunSummary> {
+  const detailsFetched = enriched.filter((e) => e.detail !== null).length;
+  const detailErrors = ctx.skipDetails ? 0 : enriched.length - detailsFetched;
+
   const summary: RunSummary = {
     runId,
     pagesScraped: ctx.pagesScraped,
@@ -196,27 +209,190 @@ async function applyToDb(
     recordsInserted: 0,
     recordsUpdated: 0,
     recordsUnchanged: 0,
-    detailsFetched: 0,
-    errors: 0,
-    status: "success",
+    detailsFetched,
+    errors: detailErrors,
+    status: detailErrors > 0 ? "partial" : "success",
   };
 
-  for (const item of enriched) {
-    if (item.detail !== null) summary.detailsFetched++;
-    try {
-      const result = await upsertLicitacao(db, item, ctx.sourceLastUpdate);
-      if (result === "inserted") summary.recordsInserted++;
-      else if (result === "updated") summary.recordsUpdated++;
-      else summary.recordsUnchanged++;
-    } catch (err) {
-      summary.errors++;
-      summary.status = "partial";
-      const message = err instanceof Error ? err.message : String(err);
-      logger.warn({ url: item.list.detailUrl, err: message }, "failed to upsert");
-      await appendRunError(db, runId, { url: item.list.detailUrl, stage: "upsert", message });
+  if (enriched.length === 0) {
+    await persistApplyCounts(db, runId, summary);
+    return summary;
+  }
+
+  const prepared: Prepared[] = enriched.map((item) => {
+    const merged = mergeListAndDetail(item.list, item.detail);
+    const hash = contentHash(buildHashInput(merged, item.detail));
+    return { item, merged, hash };
+  });
+
+  const existingRows = await db
+    .select({
+      id: schema.licitacoes.id,
+      externalId: schema.licitacoes.externalId,
+      contentHash: schema.licitacoes.contentHash,
+    })
+    .from(schema.licitacoes)
+    .where(inArray(schema.licitacoes.externalId, prepared.map((p) => p.merged.externalId)));
+
+  const existingMap = new Map(existingRows.map((r) => [r.externalId, r]));
+  const toInsert: Prepared[] = [];
+  const toUpdate: Prepared[] = [];
+  const toUnchanged: Prepared[] = [];
+
+  for (const p of prepared) {
+    const existing = existingMap.get(p.merged.externalId);
+    if (!existing) toInsert.push(p);
+    else if (existing.contentHash === p.hash) toUnchanged.push(p);
+    else toUpdate.push(p);
+  }
+
+  await db.transaction(async (tx) => {
+    if (toUnchanged.length > 0) {
+      await tx
+        .update(schema.licitacoes)
+        .set({ lastSeenAt: new Date(), sourceLastUpdate: ctx.sourceLastUpdate })
+        .where(inArray(
+          schema.licitacoes.externalId,
+          toUnchanged.map((u) => u.merged.externalId),
+        ));
+    }
+
+    const writes = [...toInsert, ...toUpdate];
+    if (writes.length === 0) return;
+
+    const idMap = await bulkUpsertLicitacoes(tx, writes, ctx.sourceLastUpdate);
+    await replaceAllChildren(tx, writes, idMap);
+  });
+
+  summary.recordsInserted = toInsert.length;
+  summary.recordsUpdated = toUpdate.length;
+  summary.recordsUnchanged = toUnchanged.length;
+
+  await persistApplyCounts(db, runId, summary);
+  return summary;
+}
+
+async function bulkUpsertLicitacoes(
+  tx: Parameters<Parameters<Db["transaction"]>[0]>[0],
+  writes: Prepared[],
+  sourceLastUpdate: string | null,
+): Promise<Map<string, number>> {
+  const rows = writes.map((p) => ({
+    ...p.merged,
+    contentHash: p.hash,
+    sourceLastUpdate,
+  }));
+
+  const idMap = new Map<string, number>();
+  for (const chunk of chunkArray(rows, CHUNK_SIZE)) {
+    const result = await tx
+      .insert(schema.licitacoes)
+      .values(chunk)
+      .onConflictDoUpdate({
+        target: schema.licitacoes.externalId,
+        set: {
+          numero: sql`excluded.numero`,
+          ano: sql`excluded.ano`,
+          numeroSequencial: sql`excluded.numero_sequencial`,
+          modalidade: sql`excluded.modalidade`,
+          descricao: sql`excluded.descricao`,
+          objeto: sql`excluded.objeto`,
+          situacao: sql`excluded.situacao`,
+          dataSessao: sql`excluded.data_sessao`,
+          horaSessao: sql`excluded.hora_sessao`,
+          valorEstimadoCentavos: sql`excluded.valor_estimado_centavos`,
+          numeroProcessoInterno: sql`excluded.numero_processo_interno`,
+          localSessao: sql`excluded.local_sessao`,
+          observacao: sql`excluded.observacao`,
+          dataDisponibilizacao: sql`excluded.data_disponibilizacao`,
+          detailUrl: sql`excluded.detail_url`,
+          editalPdfUrl: sql`excluded.edital_pdf_url`,
+          sourceLastUpdate: sql`excluded.source_last_update`,
+          contentHash: sql`excluded.content_hash`,
+          lastSeenAt: sql`now()`,
+          lastChangedAt: sql`now()`,
+        },
+      })
+      .returning({ id: schema.licitacoes.id, externalId: schema.licitacoes.externalId });
+    for (const r of result) idMap.set(r.externalId, r.id);
+  }
+  return idMap;
+}
+
+async function replaceAllChildren(
+  tx: Parameters<Parameters<Db["transaction"]>[0]>[0],
+  writes: Prepared[],
+  idMap: Map<string, number>,
+): Promise<void> {
+  const writesWithDetail = writes.filter((p) => p.item.detail !== null);
+  if (writesWithDetail.length === 0) return;
+
+  const affectedIds = writesWithDetail
+    .map((p) => idMap.get(p.merged.externalId))
+    .filter((id): id is number => id !== undefined);
+  if (affectedIds.length === 0) return;
+
+  await tx.delete(schema.licitacaoDocumentos).where(inArray(schema.licitacaoDocumentos.licitacaoId, affectedIds));
+  await tx.delete(schema.licitacaoEmpresas).where(inArray(schema.licitacaoEmpresas.licitacaoId, affectedIds));
+  await tx.delete(schema.licitacaoPregoeiros).where(inArray(schema.licitacaoPregoeiros.licitacaoId, affectedIds));
+  await tx.delete(schema.licitacaoContratosAtas).where(inArray(schema.licitacaoContratosAtas.licitacaoId, affectedIds));
+
+  const docRows: typeof schema.licitacaoDocumentos.$inferInsert[] = [];
+  const empRows: typeof schema.licitacaoEmpresas.$inferInsert[] = [];
+  const preRows: typeof schema.licitacaoPregoeiros.$inferInsert[] = [];
+  const cntRows: typeof schema.licitacaoContratosAtas.$inferInsert[] = [];
+
+  for (const p of writesWithDetail) {
+    const id = idMap.get(p.merged.externalId);
+    if (id === undefined || p.item.detail === null) continue;
+
+    const seenDoc = new Set<string>();
+    for (const d of p.item.detail.documentos) {
+      const key = d.numero ?? "";
+      if (seenDoc.has(key)) continue;
+      seenDoc.add(key);
+      docRows.push({ ...d, licitacaoId: id });
+    }
+    for (const e of p.item.detail.empresas) {
+      empRows.push({
+        licitacaoId: id,
+        cnpj: e.cnpj,
+        razaoSocial: e.razaoSocial,
+        situacao: e.situacao,
+        valorPropostaCentavos: e.valorPropostaCentavos,
+        classificacao: e.classificacao,
+        rawData: e.rawData,
+      });
+    }
+    for (const pr of p.item.detail.pregoeiros) {
+      preRows.push({
+        licitacaoId: id,
+        nome: pr.nome,
+        cpf: pr.cpf,
+        funcao: pr.funcao,
+        rawData: pr.rawData,
+      });
+    }
+    for (const c of p.item.detail.contratosAtas) {
+      cntRows.push({
+        licitacaoId: id,
+        numero: c.numero,
+        tipo: c.tipo,
+        dataAssinatura: c.dataAssinatura,
+        valorCentavos: c.valorCentavos,
+        documentoUrl: c.documentoUrl,
+        rawData: c.rawData,
+      });
     }
   }
 
+  for (const chunk of chunkArray(docRows, CHUNK_SIZE)) await tx.insert(schema.licitacaoDocumentos).values(chunk);
+  for (const chunk of chunkArray(empRows, CHUNK_SIZE)) await tx.insert(schema.licitacaoEmpresas).values(chunk);
+  for (const chunk of chunkArray(preRows, CHUNK_SIZE)) await tx.insert(schema.licitacaoPregoeiros).values(chunk);
+  for (const chunk of chunkArray(cntRows, CHUNK_SIZE)) await tx.insert(schema.licitacaoContratosAtas).values(chunk);
+}
+
+async function persistApplyCounts(db: Db, runId: number, summary: RunSummary): Promise<void> {
   await db
     .update(schema.scrapingRuns)
     .set({
@@ -226,8 +402,13 @@ async function applyToDb(
       detailsFetched: summary.detailsFetched,
     })
     .where(eq(schema.scrapingRuns.id, runId));
+}
 
-  return summary;
+function chunkArray<T>(items: T[], size: number): T[][] {
+  if (items.length === 0) return [];
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+  return out;
 }
 
 async function fetchListFirstPage(baseUrl: string): Promise<LicitacaoListPage> {
@@ -257,56 +438,10 @@ async function fetchListByPage(
   return parseLicitacaoList(res.body, baseUrl);
 }
 
-type UpsertResult = "inserted" | "updated" | "unchanged";
-
-async function upsertLicitacao(
-  db: Db,
-  item: EnrichedItem,
-  sourceLastUpdate: string | null,
-): Promise<UpsertResult> {
-  const merged = mergeListAndDetail(item.list, item.detail);
-  const hash = contentHash(buildHashInput(merged, item.detail));
-
-  return db.transaction(async (tx) => {
-    const [existing] = await tx
-      .select()
-      .from(schema.licitacoes)
-      .where(eq(schema.licitacoes.externalId, item.list.externalId))
-      .limit(1);
-
-    if (!existing) {
-      const [inserted] = await tx
-        .insert(schema.licitacoes)
-        .values({ ...merged, sourceLastUpdate, contentHash: hash })
-        .returning({ id: schema.licitacoes.id });
-      if (item.detail) await replaceChildren(tx, inserted.id, item.detail);
-      return "inserted";
-    }
-
-    if (existing.contentHash === hash) {
-      await tx
-        .update(schema.licitacoes)
-        .set({ lastSeenAt: new Date(), sourceLastUpdate })
-        .where(eq(schema.licitacoes.id, existing.id));
-      return "unchanged";
-    }
-
-    await tx
-      .update(schema.licitacoes)
-      .set({
-        ...merged,
-        sourceLastUpdate,
-        contentHash: hash,
-        lastSeenAt: new Date(),
-        lastChangedAt: new Date(),
-      })
-      .where(eq(schema.licitacoes.id, existing.id));
-    if (item.detail) await replaceChildren(tx, existing.id, item.detail);
-    return "updated";
-  });
-}
-
-function buildHashInput(merged: ReturnType<typeof mergeListAndDetail>, detail: LicitacaoDetail | null) {
+function buildHashInput(
+  merged: ReturnType<typeof mergeListAndDetail>,
+  detail: LicitacaoDetail | null,
+) {
   return {
     ...merged,
     valorEstimadoCentavos: merged.valorEstimadoCentavos?.toString() ?? null,
@@ -340,67 +475,6 @@ function mergeListAndDetail(item: LicitacaoListItem, detail: LicitacaoDetail | n
   };
 }
 
-async function replaceChildren(
-  tx: Parameters<Parameters<Db["transaction"]>[0]>[0],
-  licitacaoId: number,
-  detail: LicitacaoDetail,
-): Promise<void> {
-  await tx.delete(schema.licitacaoDocumentos).where(eq(schema.licitacaoDocumentos.licitacaoId, licitacaoId));
-  await tx.delete(schema.licitacaoEmpresas).where(eq(schema.licitacaoEmpresas.licitacaoId, licitacaoId));
-  await tx.delete(schema.licitacaoPregoeiros).where(eq(schema.licitacaoPregoeiros.licitacaoId, licitacaoId));
-  await tx.delete(schema.licitacaoContratosAtas).where(eq(schema.licitacaoContratosAtas.licitacaoId, licitacaoId));
-
-  if (detail.documentos.length > 0) {
-    const seen = new Set<string>();
-    const rows = detail.documentos
-      .filter((d) => {
-        const key = d.numero ?? "";
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      })
-      .map((d) => ({ ...d, licitacaoId }));
-    await tx.insert(schema.licitacaoDocumentos).values(rows);
-  }
-  if (detail.empresas.length > 0) {
-    await tx.insert(schema.licitacaoEmpresas).values(
-      detail.empresas.map((e) => ({
-        licitacaoId,
-        cnpj: e.cnpj,
-        razaoSocial: e.razaoSocial,
-        situacao: e.situacao,
-        valorPropostaCentavos: e.valorPropostaCentavos,
-        classificacao: e.classificacao,
-        rawData: e.rawData,
-      })),
-    );
-  }
-  if (detail.pregoeiros.length > 0) {
-    await tx.insert(schema.licitacaoPregoeiros).values(
-      detail.pregoeiros.map((p) => ({
-        licitacaoId,
-        nome: p.nome,
-        cpf: p.cpf,
-        funcao: p.funcao,
-        rawData: p.rawData,
-      })),
-    );
-  }
-  if (detail.contratosAtas.length > 0) {
-    await tx.insert(schema.licitacaoContratosAtas).values(
-      detail.contratosAtas.map((c) => ({
-        licitacaoId,
-        numero: c.numero,
-        tipo: c.tipo,
-        dataAssinatura: c.dataAssinatura,
-        valorCentavos: c.valorCentavos,
-        documentoUrl: c.documentoUrl,
-        rawData: c.rawData,
-      })),
-    );
-  }
-}
-
 function canonicalEmpresa(e: LicitacaoDetail["empresas"][number]) {
   return { ...e, valorPropostaCentavos: e.valorPropostaCentavos?.toString() ?? null };
 }
@@ -428,22 +502,5 @@ async function failRun(db: Db, runId: number, err: unknown) {
   await db
     .update(schema.scrapingRuns)
     .set({ finishedAt: new Date(), status: "failed", errorSummary: message })
-    .where(eq(schema.scrapingRuns.id, runId));
-}
-
-async function appendRunError(
-  db: Db,
-  runId: number,
-  err: { url?: string; stage?: string; message: string; attempt?: number },
-) {
-  const [row] = await db
-    .select({ errors: schema.scrapingRuns.errors })
-    .from(schema.scrapingRuns)
-    .where(eq(schema.scrapingRuns.id, runId))
-    .limit(1);
-  const existing = row?.errors ?? [];
-  await db
-    .update(schema.scrapingRuns)
-    .set({ errors: [...existing, err] })
     .where(eq(schema.scrapingRuns.id, runId));
 }
