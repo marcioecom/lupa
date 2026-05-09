@@ -8,6 +8,9 @@ const envSchema = z.object({
   SCRAPER_REQUEST_DELAY_MS: z.coerce.number().int().nonnegative().default(250),
   SCRAPER_CONCURRENCY: z.coerce.number().int().positive().default(4),
   SCRAPER_TIMEOUT_MS: z.coerce.number().int().positive().default(20_000),
+  SCRAPER_SCHEDULE_ENABLED: z.coerce.boolean().default(false),
+  SCRAPER_SCHEDULE_INTERVAL_HOURS: z.coerce.number().positive().default(24),
+  SCRAPER_SCHEDULE_RUN_ON_START: z.coerce.boolean().default(true),
   API_PORT: z.coerce.number().int().positive().default(3000),
   API_HOST: z.string().min(1).default("127.0.0.1"),
   LOG_LEVEL: z
