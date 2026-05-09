@@ -6,9 +6,17 @@ import { type Db, getDb, schema } from "../../db/client";
 import { fetchHtml } from "../http-client";
 import { contentHash } from "../parsers/common";
 import { parseLicitacaoDetail, type LicitacaoDetail } from "../parsers/licitacao-detail";
-import { parseLicitacaoList, type LicitacaoListItem, type LicitacaoListPage, type PaginationForm } from "../parsers/licitacao-list";
+import {
+  parseLicitacaoList,
+  type LicitacaoListItem,
+  type LicitacaoListPage,
+  type PaginationForm,
+} from "../parsers/licitacao-list";
 
-const logger = pino({ level: config.LOG_LEVEL, transport: { target: "pino-pretty", options: { colorize: true } } });
+const logger = pino({
+  level: config.LOG_LEVEL,
+  transport: { target: "pino-pretty", options: { colorize: true } },
+});
 
 export type RunOptions = {
   limit?: number;
@@ -29,6 +37,18 @@ export type RunSummary = {
   status: "success" | "partial" | "failed";
 };
 
+type EnrichedItem = {
+  list: LicitacaoListItem;
+  detail: LicitacaoDetail | null;
+};
+
+type CollectedList = {
+  items: LicitacaoListItem[];
+  pagesScraped: number;
+  recordsSeen: number;
+  firstPage: LicitacaoListPage | null;
+};
+
 const LIST_URL_PATH = "/licitacao";
 
 export async function runLicitacaoPipeline(options: RunOptions = {}): Promise<RunSummary> {
@@ -46,11 +66,115 @@ export async function runLicitacaoPipeline(options: RunOptions = {}): Promise<Ru
 }
 
 async function execute(db: Db, runId: number, options: RunOptions): Promise<RunSummary> {
+  const collected = await collectListItems(options);
+  await persistListPhase(db, runId, collected);
+
+  const enriched = await fetchAllDetails(collected.items, options);
+
+  return applyToDb(db, runId, enriched, {
+    pagesScraped: collected.pagesScraped,
+    recordsSeen: collected.recordsSeen,
+    sourceLastUpdate: collected.firstPage?.sourceLastUpdate ?? null,
+  });
+}
+
+async function collectListItems(options: RunOptions): Promise<CollectedList> {
   const baseUrl = config.SCRAPER_BASE_URL;
+  const pageFrom = options.pageFrom ?? 1;
+  const pageTo = options.pageTo ?? Number.MAX_SAFE_INTEGER;
+
+  const items: LicitacaoListItem[] = [];
+  let firstPage: LicitacaoListPage | null = null;
+  let pagesScraped = 0;
+  let recordsSeen = 0;
+
+  let currentPage = pageFrom;
+  let lastKnownPage = pageTo === Number.MAX_SAFE_INTEGER ? Infinity : pageTo;
+
+  while (currentPage <= lastKnownPage) {
+    const page: LicitacaoListPage =
+      currentPage === pageFrom && pageFrom === 1
+        ? await fetchListFirstPage(baseUrl)
+        : await fetchListByPage(baseUrl, currentPage, firstPage?.paginationForm ?? null);
+
+    if (currentPage === pageFrom) firstPage = page;
+    pagesScraped++;
+    recordsSeen += page.items.length;
+
+    const remaining = options.limit ? options.limit - items.length : Infinity;
+    items.push(...page.items.slice(0, Math.max(0, remaining)));
+
+    logger.info(
+      { page: currentPage, items: page.items.length, lastPage: page.totalPages },
+      "scraped list page",
+    );
+
+    if (options.limit && items.length >= options.limit) break;
+    const totalPages = page.totalPages ?? 1;
+    if (currentPage >= totalPages) break;
+    if (lastKnownPage === Infinity) lastKnownPage = totalPages;
+
+    currentPage++;
+    if (config.SCRAPER_REQUEST_DELAY_MS > 0) await delay(config.SCRAPER_REQUEST_DELAY_MS);
+  }
+
+  return { items, pagesScraped, recordsSeen, firstPage };
+}
+
+async function persistListPhase(db: Db, runId: number, collected: CollectedList): Promise<void> {
+  await db
+    .update(schema.scrapingRuns)
+    .set({
+      pagesScraped: collected.pagesScraped,
+      recordsSeen: collected.recordsSeen,
+      sourceLastUpdateSeen: collected.firstPage?.sourceLastUpdate ?? null,
+    })
+    .where(eq(schema.scrapingRuns.id, runId));
+}
+
+async function fetchAllDetails(
+  items: LicitacaoListItem[],
+  options: RunOptions,
+): Promise<EnrichedItem[]> {
+  if (options.skipDetails) {
+    return items.map((list) => ({ list, detail: null }));
+  }
+
+  const enriched: EnrichedItem[] = [];
+  for (const item of items) {
+    enriched.push({ list: item, detail: await fetchOneDetail(item) });
+    if (config.SCRAPER_REQUEST_DELAY_MS > 0) await delay(config.SCRAPER_REQUEST_DELAY_MS);
+  }
+  return enriched;
+}
+
+async function fetchOneDetail(item: LicitacaoListItem): Promise<LicitacaoDetail | null> {
+  try {
+    const response = await fetchHtml(item.detailUrl);
+    return parseLicitacaoDetail(response.body, config.SCRAPER_BASE_URL);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    logger.warn({ url: item.detailUrl, err: message }, "failed to fetch/parse detail");
+    return null;
+  }
+}
+
+type ApplyContext = {
+  pagesScraped: number;
+  recordsSeen: number;
+  sourceLastUpdate: string | null;
+};
+
+async function applyToDb(
+  db: Db,
+  runId: number,
+  enriched: EnrichedItem[],
+  ctx: ApplyContext,
+): Promise<RunSummary> {
   const summary: RunSummary = {
     runId,
-    pagesScraped: 0,
-    recordsSeen: 0,
+    pagesScraped: ctx.pagesScraped,
+    recordsSeen: ctx.recordsSeen,
     recordsInserted: 0,
     recordsUpdated: 0,
     recordsUnchanged: 0,
@@ -59,66 +183,10 @@ async function execute(db: Db, runId: number, options: RunOptions): Promise<RunS
     status: "success",
   };
 
-  const collected: LicitacaoListItem[] = [];
-  let firstPage: LicitacaoListPage | null = null;
-
-  const pageFrom = options.pageFrom ?? 1;
-  const pageTo = options.pageTo ?? Number.MAX_SAFE_INTEGER;
-  let currentPage = pageFrom;
-  let lastKnownPage = pageTo === Number.MAX_SAFE_INTEGER ? Infinity : pageTo;
-
-  while (currentPage <= lastKnownPage) {
-    const listResult: { page: LicitacaoListPage } =
-      currentPage === 1 && pageFrom === 1
-        ? await fetchListFirstPage(baseUrl)
-        : await fetchListByPage(baseUrl, currentPage, firstPage?.paginationForm ?? null);
-
-    if (currentPage === pageFrom) firstPage = listResult.page;
-    summary.pagesScraped++;
-
-    const remainingBudget = options.limit ? options.limit - collected.length : Infinity;
-    const sliced = listResult.page.items.slice(0, Math.max(0, remainingBudget));
-    collected.push(...sliced);
-    summary.recordsSeen += listResult.page.items.length;
-
-    if (firstPage?.sourceLastUpdate) {
-      await db
-        .update(schema.scrapingRuns)
-        .set({ sourceLastUpdateSeen: firstPage.sourceLastUpdate })
-        .where(eq(schema.scrapingRuns.id, runId));
-    }
-
-    logger.info(
-      { page: currentPage, items: listResult.page.items.length, lastPage: listResult.page.totalPages },
-      "scraped list page",
-    );
-
-    if (options.limit && collected.length >= options.limit) break;
-
-    const totalPages = listResult.page.totalPages ?? 1;
-    if (currentPage >= totalPages) break;
-    if (lastKnownPage === Infinity) lastKnownPage = totalPages;
-
-    currentPage++;
-    if (config.SCRAPER_REQUEST_DELAY_MS > 0) await delay(config.SCRAPER_REQUEST_DELAY_MS);
-  }
-
-  await db
-    .update(schema.scrapingRuns)
-    .set({ pagesScraped: summary.pagesScraped, recordsSeen: summary.recordsSeen })
-    .where(eq(schema.scrapingRuns.id, runId));
-
-  for (const item of collected) {
+  for (const item of enriched) {
+    if (item.detail !== null) summary.detailsFetched++;
     try {
-      let detail: LicitacaoDetail | null = null;
-      if (!options.skipDetails) {
-        const response = await fetchHtml(item.detailUrl);
-        detail = parseLicitacaoDetail(response.body, baseUrl);
-        summary.detailsFetched++;
-        if (config.SCRAPER_REQUEST_DELAY_MS > 0) await delay(config.SCRAPER_REQUEST_DELAY_MS);
-      }
-
-      const result = await upsertLicitacao(db, item, detail, firstPage?.sourceLastUpdate ?? null);
+      const result = await upsertLicitacao(db, item, ctx.sourceLastUpdate);
       if (result === "inserted") summary.recordsInserted++;
       else if (result === "updated") summary.recordsUpdated++;
       else summary.recordsUnchanged++;
@@ -126,12 +194,8 @@ async function execute(db: Db, runId: number, options: RunOptions): Promise<RunS
       summary.errors++;
       summary.status = "partial";
       const message = err instanceof Error ? err.message : String(err);
-      logger.warn({ url: item.detailUrl, err: message }, "failed to fetch/parse detail");
-      await appendRunError(db, runId, {
-        url: item.detailUrl,
-        stage: "detail",
-        message,
-      });
+      logger.warn({ url: item.list.detailUrl, err: message }, "failed to upsert");
+      await appendRunError(db, runId, { url: item.list.detailUrl, stage: "upsert", message });
     }
   }
 
@@ -148,20 +212,18 @@ async function execute(db: Db, runId: number, options: RunOptions): Promise<RunS
   return summary;
 }
 
-async function fetchListFirstPage(baseUrl: string): Promise<{ page: LicitacaoListPage }> {
+async function fetchListFirstPage(baseUrl: string): Promise<LicitacaoListPage> {
   const url = new URL(LIST_URL_PATH, baseUrl).toString();
   const res = await fetchHtml(url);
-  return { page: parseLicitacaoList(res.body, baseUrl) };
+  return parseLicitacaoList(res.body, baseUrl);
 }
 
 async function fetchListByPage(
   baseUrl: string,
   page: number,
   form: PaginationForm | null,
-): Promise<{ page: LicitacaoListPage }> {
-  if (!form) {
-    return fetchListFirstPage(baseUrl);
-  }
+): Promise<LicitacaoListPage> {
+  if (!form) return fetchListFirstPage(baseUrl);
   const body = new URLSearchParams({
     dadosfilter: form.dadosfilter,
     total: form.total,
@@ -174,47 +236,33 @@ async function fetchListByPage(
     body,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   });
-  return { page: parseLicitacaoList(res.body, baseUrl) };
+  return parseLicitacaoList(res.body, baseUrl);
 }
 
 type UpsertResult = "inserted" | "updated" | "unchanged";
 
 async function upsertLicitacao(
   db: Db,
-  item: LicitacaoListItem,
-  detail: LicitacaoDetail | null,
+  item: EnrichedItem,
   sourceLastUpdate: string | null,
 ): Promise<UpsertResult> {
-  const merged = mergeListAndDetail(item, detail);
-  const hashInput: Record<string, unknown> = {
-    ...merged,
-    valorEstimadoCentavos: merged.valorEstimadoCentavos === null ? null : merged.valorEstimadoCentavos.toString(),
-    documentos: detail?.documentos ?? [],
-    empresas: detail?.empresas?.map(canonicalEmpresa) ?? [],
-    pregoeiros: detail?.pregoeiros ?? [],
-    contratosAtas: detail?.contratosAtas?.map(canonicalContrato) ?? [],
-  };
-  const hash = contentHash(hashInput);
+  const merged = mergeListAndDetail(item.list, item.detail);
+  const hash = contentHash(buildHashInput(merged, item.detail));
 
   return db.transaction(async (tx) => {
     const [existing] = await tx
       .select()
       .from(schema.licitacoes)
-      .where(eq(schema.licitacoes.externalId, item.externalId))
+      .where(eq(schema.licitacoes.externalId, item.list.externalId))
       .limit(1);
 
     if (!existing) {
       const [inserted] = await tx
         .insert(schema.licitacoes)
-        .values({
-          ...merged,
-          sourceLastUpdate,
-          contentHash: hash,
-        })
+        .values({ ...merged, sourceLastUpdate, contentHash: hash })
         .returning({ id: schema.licitacoes.id });
-
-      if (detail) await replaceChildren(tx, inserted.id, detail);
-      return "inserted" as const;
+      if (item.detail) await replaceChildren(tx, inserted.id, item.detail);
+      return "inserted";
     }
 
     if (existing.contentHash === hash) {
@@ -222,7 +270,7 @@ async function upsertLicitacao(
         .update(schema.licitacoes)
         .set({ lastSeenAt: new Date(), sourceLastUpdate })
         .where(eq(schema.licitacoes.id, existing.id));
-      return "unchanged" as const;
+      return "unchanged";
     }
 
     await tx
@@ -235,10 +283,20 @@ async function upsertLicitacao(
         lastChangedAt: new Date(),
       })
       .where(eq(schema.licitacoes.id, existing.id));
-
-    if (detail) await replaceChildren(tx, existing.id, detail);
-    return "updated" as const;
+    if (item.detail) await replaceChildren(tx, existing.id, item.detail);
+    return "updated";
   });
+}
+
+function buildHashInput(merged: ReturnType<typeof mergeListAndDetail>, detail: LicitacaoDetail | null) {
+  return {
+    ...merged,
+    valorEstimadoCentavos: merged.valorEstimadoCentavos?.toString() ?? null,
+    documentos: detail?.documentos ?? [],
+    empresas: detail?.empresas?.map(canonicalEmpresa) ?? [],
+    pregoeiros: detail?.pregoeiros ?? [],
+    contratosAtas: detail?.contratosAtas?.map(canonicalContrato) ?? [],
+  };
 }
 
 function mergeListAndDetail(item: LicitacaoListItem, detail: LicitacaoDetail | null) {
@@ -326,10 +384,10 @@ async function replaceChildren(
 }
 
 function canonicalEmpresa(e: LicitacaoDetail["empresas"][number]) {
-  return { ...e, valorPropostaCentavos: e.valorPropostaCentavos === null ? null : e.valorPropostaCentavos.toString() };
+  return { ...e, valorPropostaCentavos: e.valorPropostaCentavos?.toString() ?? null };
 }
 function canonicalContrato(c: LicitacaoDetail["contratosAtas"][number]) {
-  return { ...c, valorCentavos: c.valorCentavos === null ? null : c.valorCentavos.toString() };
+  return { ...c, valorCentavos: c.valorCentavos?.toString() ?? null };
 }
 
 async function startRun(db: Db) {
