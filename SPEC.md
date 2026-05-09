@@ -11,9 +11,11 @@ Fontes:
 
 ## Iteracao atual
 
-**Iteracao 1 - Licitacoes + fundacao do projeto.**
+**Iteracao 3 - Contratos.** Itera sobre a fundacao das iteracoes 1-2 (licitacoes). Obras vem na proxima iteracao.
 
-Contratos e obras serao iteracoes posteriores que reaproveitam a fundacao (config, http client, db client, parser helpers, padroes de upsert/auditoria).
+Modulos cobertos ate aqui:
+- `licitacoes` (670 registros) - iteracao 1
+- `contratos` (1.191 registros) - iteracao 3
 
 ## Stack
 
@@ -27,7 +29,11 @@ Contratos e obras serao iteracoes posteriores que reaproveitam a fundacao (confi
 
 ## Modelo de dados (resumo)
 
-Tabela principal `licitacoes` + 4 tabelas filhas (documentos, empresas, pregoeiros, contratos_atas) ligadas por `licitacao_id` com cascade. Tabela `scraping_runs` para auditoria.
+**Licitacoes** (iteracao 1): tabela principal `licitacoes` + 4 filhas (documentos, empresas, pregoeiros, contratos_atas).
+
+**Contratos** (iteracao 3): tabela principal `contratos` + 5 filhas (documentos, aditivos, apostilamentos, pagamentos, responsaveis). Coluna `contratos.licitacao_external_id` faz cross-reference (sem FK rigida) para `licitacoes.external_id`, permitindo join no BI quando o contrato originou de uma licitacao.
+
+Tabela `scraping_runs` (compartilhada) para auditoria com coluna `module = 'licitacao' | 'contrato'`.
 
 Convencoes:
 - valores monetarios em `bigint` (centavos)
@@ -41,11 +47,15 @@ REST sob `/api/`, JSON. Paginacao por `?page=&pageSize=`.
 
 Rotas principais:
 - `/health`
-- `/api/meta/last-scrape`
-- `/api/licitacoes` (lista + filtros)
+- `/api/meta/last-scrape?module=licitacao|contrato`
+- `/api/licitacoes` (lista + filtros: ano, modalidade, situacao, valorMin/Max, dataDe/Ate, q full-text)
 - `/api/licitacoes/:id` (detalhe completo)
 - `/api/licitacoes/:id/{documentos,empresas,pregoeiros,contratos-atas}`
 - `/api/licitacoes/stats/{by-modalidade,by-situacao,by-month}`
+- `/api/contratos` (lista + filtros: ano, modalidade, situacao, unidadeGestora, cnpj, licitacaoExternalId, vigenciaDe/Ate, valorMin/Max, q full-text)
+- `/api/contratos/:id` (detalhe completo)
+- `/api/contratos/:id/{documentos,aditivos,apostilamentos,pagamentos,responsaveis}`
+- `/api/contratos/stats/{by-modalidade,by-situacao,by-month,by-empresa}`
 
 ## Paginacao do portal (resolvido)
 
@@ -67,17 +77,19 @@ A fase de DB usa `INSERT ... ON CONFLICT (external_id) DO UPDATE` em chunks (CHU
 
 Os fetches HTTP de detalhe sao paralelizados via worker pool (`pMap`) com `SCRAPER_CONCURRENCY=4` por padrao. Sem `delay` interno - a concorrencia limitada controla a taxa.
 
-**Numeros medidos** (2026-05-09, 670 licitacoes, banco local em Docker):
-- Carga limpa (insert do zero): **2:33min** (vs ~12min na implementacao serial anterior, ~4.7x mais rapido).
-- Re-execucao idempotente: **2:33min** tambem - o tempo e dominado pelos 670 fetches HTTP de detalhe; o DB e quase instantaneo (670 unchanged em uma unica query).
+**Numeros medidos** (2026-05-09, banco local em Docker):
+- **Licitacoes** (670 registros): carga limpa **2:33min**, re-run idempotente **2:33min** (~4.7x mais rapido que a implementacao serial anterior).
+- **Contratos** (1.191 registros): carga limpa **4:19min**, re-run idempotente **4:16min**. Detalhes da carga: 3.544 documentos, 612 aditivos, 208 apostilamentos, 4.365 pagamentos, 1.903 responsaveis.
+
+Re-runs continuam baixando todos os detalhes pelo HTTP - o gargalo e a rede, nao o DB. Mitigacao futura: list-hash short-circuit (TODO).
 
 ## TODOs conhecidos
 - **Re-execucao mais rapida**: hoje a 2a rodada continua baixando todos os detalhes mesmo quando nada mudou. Otimizacao: armazenar um `list_hash` separado (so dos campos da listagem), comparar antes do fetch e pular detalhe quando casa. Reduziria re-execucao para ~10-15s.
 - Busca full-text sem acento no Postgres (carrega extensao `unaccent` ou ajusta dicionario). Hoje so casa com acento ("manutenção" sim, "manutencao" nao).
-- Scraper de contratos (proxima iteracao).
 - Scraper de obras (proxima iteracao).
 - Scheduler/cron quando definir hosting.
-- Download fisico dos PDFs de editais.
+- Download fisico dos PDFs (editais, contratos).
+- Endpoint `/api/licitacoes/:id/contratos-derivados` (join contratos.licitacao_external_id -> licitacoes.external_id).
 
 ## Como rodar (dev)
 
@@ -89,6 +101,7 @@ cp .env.example .env
 pnpm install
 pnpm db:push                      # aplica schema
 pnpm test                         # roda testes de parser
-pnpm scrape:licitacao --limit 3   # carga parcial para validar
+pnpm scrape:licitacao --limit 3   # carga parcial de licitacoes
+pnpm scrape:contrato --limit 3    # carga parcial de contratos
 pnpm api                          # API em http://127.0.0.1:3000
 ```
