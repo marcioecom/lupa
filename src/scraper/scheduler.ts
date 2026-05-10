@@ -2,6 +2,7 @@ import pino from "pino";
 import { config } from "../config";
 import { runContratoPipeline } from "./pipelines/contrato-pipeline";
 import { runLicitacaoPipeline } from "./pipelines/licitacao-pipeline";
+import { runObraPipeline } from "./pipelines/obra-pipeline";
 
 const logger = pino({
   level: config.LOG_LEVEL,
@@ -35,11 +36,13 @@ export function startScraperScheduler(): ScraperScheduler {
       try {
         const licitacoes = await runLicitacaoPipeline();
         const contratos = await runContratoPipeline();
+        const obras = await runObraPipeline();
         logger.info(
           {
             durationMs: Date.now() - startedAt,
             licitacoes,
             contratos,
+            obras,
           },
           "finished scheduled scrape cycle",
         );

@@ -17,6 +17,7 @@
     "db:studio": "drizzle-kit studio",
     "scrape:licitacao": "tsx src/cli/scrape-licitacao.ts",
     "scrape:contrato": "tsx src/cli/scrape-contrato.ts",
+    "scrape:obra": "tsx src/cli/scrape-obra.ts",
     "api": "tsx src/cli/serve.ts",
     "api:dev": "tsx watch src/cli/serve.ts",
     "start": "npm run api"
