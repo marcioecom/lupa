@@ -9,13 +9,17 @@ Fontes:
 - https://transparencia.tceto.tc.br/contrato/Index (~1.191 registros)
 - https://transparencia.tceto.tc.br/obraseservicosdeengenharia (~14 registros)
 
-## Iteracao atual
+## Status do projeto
 
-**Iteracao 3 - Contratos.** Itera sobre a fundacao das iteracoes 1-2 (licitacoes). Obras vem na proxima iteracao.
+**Os 3 modulos do escopo original estao cobertos end-to-end.**
 
-Modulos cobertos ate aqui:
-- `licitacoes` (670 registros) - iteracao 1
-- `contratos` (1.191 registros) - iteracao 3
+| Modulo | Registros | Iteracao | Tabelas | Endpoints |
+|---|---|---|---|---|
+| licitacoes | 670 | 1 | 1 + 4 filhas | list/detail/4 children/3 stats |
+| contratos | 1.191 | 3 | 1 + 5 filhas | list/detail/5 children/4 stats |
+| obras | 14 | 4 | 1 (sem filhas) | list/detail/3 stats |
+
+API tem documentacao automatica via Scalar em `/docs` (gerada de `@fastify/swagger`).
 
 ## Stack
 
@@ -33,7 +37,9 @@ Modulos cobertos ate aqui:
 
 **Contratos** (iteracao 3): tabela principal `contratos` + 5 filhas (documentos, aditivos, apostilamentos, pagamentos, responsaveis). Coluna `contratos.licitacao_external_id` faz cross-reference (sem FK rigida) para `licitacoes.external_id`, permitindo join no BI quando o contrato originou de uma licitacao.
 
-Tabela `scraping_runs` (compartilhada) para auditoria com coluna `module = 'licitacao' | 'contrato'`.
+**Obras** (iteracao 4): tabela unica `obras` (as 7 abas do detalhe estao vazias no dataset atual; modelaremos quando aparecerem dados). Coluna `obras.contrato_external_id` faz cross-reference para `contratos.external_id` (1:1 com os contratos no dataset atual). Campo `medicoes_percentual numeric(5,2)` para tracking fisico da obra (BI-friendly).
+
+Tabela `scraping_runs` (compartilhada) para auditoria com coluna `module = 'licitacao' | 'contrato' | 'obra'`.
 
 Convencoes:
 - valores monetarios em `bigint` (centavos)
@@ -56,6 +62,10 @@ Rotas principais:
 - `/api/contratos/:id` (detalhe completo)
 - `/api/contratos/:id/{documentos,aditivos,apostilamentos,pagamentos,responsaveis}`
 - `/api/contratos/stats/{by-modalidade,by-situacao,by-month,by-empresa}`
+- `/api/obras` (lista + filtros: ano, situacao, empresa, contratoExternalId, valorMin/Max, q full-text)
+- `/api/obras/:id` (detalhe)
+- `/api/obras/stats/{by-situacao,by-ano,by-empresa}`
+- `/docs` (UI Scalar com OpenAPI 3.1 auto-gerado)
 
 ## Paginacao do portal (resolvido)
 
@@ -77,19 +87,22 @@ A fase de DB usa `INSERT ... ON CONFLICT (external_id) DO UPDATE` em chunks (CHU
 
 Os fetches HTTP de detalhe sao paralelizados via worker pool (`pMap`) com `SCRAPER_CONCURRENCY=4` por padrao. Sem `delay` interno - a concorrencia limitada controla a taxa.
 
-**Numeros medidos** (2026-05-09, banco local em Docker):
+**Numeros medidos** (2026-05-09 a 2026-05-10, banco local em Docker):
 - **Licitacoes** (670 registros): carga limpa **2:33min**, re-run idempotente **2:33min** (~4.7x mais rapido que a implementacao serial anterior).
 - **Contratos** (1.191 registros): carga limpa **4:19min**, re-run idempotente **4:16min**. Detalhes da carga: 3.544 documentos, 612 aditivos, 208 apostilamentos, 4.365 pagamentos, 1.903 responsaveis.
+- **Obras** (14 registros): carga limpa **~32s** (dominado pela latencia do portal de obras, hoje em ~30s para 1 request). Pipeline mais simples - sem fetch de detalhe. 100% das obras linkam para um contrato ja na DB.
 
-Re-runs continuam baixando todos os detalhes pelo HTTP - o gargalo e a rede, nao o DB. Mitigacao futura: list-hash short-circuit (TODO).
+Re-runs de licitacao/contrato continuam baixando todos os detalhes pelo HTTP - o gargalo e a rede, nao o DB. Mitigacao futura: list-hash short-circuit (TODO).
 
 ## TODOs conhecidos
 - **Re-execucao mais rapida**: hoje a 2a rodada continua baixando todos os detalhes mesmo quando nada mudou. Otimizacao: armazenar um `list_hash` separado (so dos campos da listagem), comparar antes do fetch e pular detalhe quando casa. Reduziria re-execucao para ~10-15s.
 - Busca full-text sem acento no Postgres (carrega extensao `unaccent` ou ajusta dicionario). Hoje so casa com acento ("manutenção" sim, "manutencao" nao).
-- Scraper de obras (proxima iteracao).
-- Scheduler/cron quando definir hosting.
+- **Tabelas filhas de obras** (medições, empenhos, planilhas, cronogramas, fontes recurso, liquidações, documentos liquidação) - todas vazias hoje, modelar quando aparecerem dados.
+- **Sub-modulo Obras Paralisadas** (`/obrasparalisadas`) - 6 atestados PDF anuais.
+- Endpoint `/api/contratos/:id/obras` (join via `obras.contrato_external_id`). Trivial.
+- Endpoint `/api/licitacoes/:id/contratos-derivados` (join via `contratos.licitacao_external_id`). Trivial.
 - Download fisico dos PDFs (editais, contratos).
-- Endpoint `/api/licitacoes/:id/contratos-derivados` (join contratos.licitacao_external_id -> licitacoes.external_id).
+- Tuning do scheduler em produçao (hoje roda licitacao + contrato + obra em sequencia a cada N horas).
 
 ## Como rodar (dev)
 
@@ -103,5 +116,6 @@ pnpm db:push                      # aplica schema
 pnpm test                         # roda testes de parser
 pnpm scrape:licitacao --limit 3   # carga parcial de licitacoes
 pnpm scrape:contrato --limit 3    # carga parcial de contratos
-pnpm api                          # API em http://127.0.0.1:3000
+pnpm scrape:obra --limit 3        # carga parcial de obras
+pnpm api                          # API em http://127.0.0.1:3000 (UI Scalar em /docs)
 ```
