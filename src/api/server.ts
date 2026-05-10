@@ -7,6 +7,7 @@ import { contratosRoutes } from "./routes/contratos";
 import { healthRoutes } from "./routes/health";
 import { licitacoesRoutes } from "./routes/licitacoes";
 import { metaRoutes } from "./routes/meta";
+import { obrasRoutes } from "./routes/obras";
 
 export async function buildServer(): Promise<FastifyInstance> {
   const app = Fastify({
@@ -54,6 +55,7 @@ export async function buildServer(): Promise<FastifyInstance> {
         { name: "meta", description: "Metadados de scraping" },
         { name: "licitacoes", description: "Licitações do TCE-TO (~670 registros)" },
         { name: "contratos", description: "Contratos do TCE-TO (~1.191 registros)" },
+        { name: "obras", description: "Obras e serviços de engenharia do TCE-TO (~14 registros)" },
       ],
     },
   });
@@ -70,6 +72,7 @@ export async function buildServer(): Promise<FastifyInstance> {
   await app.register(metaRoutes, { prefix: "/api/meta" });
   await app.register(licitacoesRoutes, { prefix: "/api/licitacoes" });
   await app.register(contratosRoutes, { prefix: "/api/contratos" });
+  await app.register(obrasRoutes, { prefix: "/api/obras" });
 
   return app;
 }
