@@ -10,3 +10,4 @@ export * from "./contrato-aditivos";
 export * from "./contrato-apostilamentos";
 export * from "./contrato-pagamentos";
 export * from "./contrato-responsaveis";
+export * from "./obras";
