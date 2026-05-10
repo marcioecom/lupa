@@ -22,16 +22,6 @@ export async function buildServer(): Promise<FastifyInstance> {
     convertBigints(payload),
   );
 
-  app.addHook("onRoute", (route) => {
-    const tag = resolveRouteTag(route.url);
-    if (!tag) return;
-
-    route.schema = {
-      ...route.schema,
-      tags: route.schema?.tags ?? [tag],
-    };
-  });
-
   app.decorate("db", getDb());
 
   app.addHook("onClose", async () => {
@@ -75,14 +65,6 @@ export async function buildServer(): Promise<FastifyInstance> {
   await app.register(obrasRoutes, { prefix: "/api/obras" });
 
   return app;
-}
-
-function resolveRouteTag(url: string): string | null {
-  if (url === "/health") return "health";
-  if (url.startsWith("/api/meta")) return "meta";
-  if (url.startsWith("/api/licitacoes")) return "licitacoes";
-  if (url.startsWith("/api/contratos")) return "contratos";
-  return null;
 }
 
 function convertBigints(value: unknown): unknown {

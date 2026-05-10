@@ -1,6 +1,7 @@
 import { and, asc, count, desc, eq, gte, lte, sql, type SQL } from "drizzle-orm";
 import type { FastifyPluginAsync } from "fastify";
 import { schema } from "../../db/client";
+import { tagRoutes } from "../plugins/tag-routes";
 
 type ListQuery = {
   page?: number;
@@ -19,6 +20,8 @@ type ListQuery = {
 };
 
 export const contratosRoutes: FastifyPluginAsync = async (app) => {
+  tagRoutes(app, "contratos");
+
   app.get("/", {
     schema: {
       querystring: {
