@@ -1,8 +1,7 @@
-import fastifySwagger from "@fastify/swagger";
-import scalarApiReference from "@scalar/fastify-api-reference";
 import Fastify, { type FastifyInstance } from "fastify";
 import { config } from "../config";
 import { closeDb, getDb } from "../db/client";
+import { registerDocs } from "./plugins/docs";
 import { contratosRoutes } from "./routes/contratos";
 import { healthRoutes } from "./routes/health";
 import { licitacoesRoutes } from "./routes/licitacoes";
@@ -28,35 +27,7 @@ export async function buildServer(): Promise<FastifyInstance> {
     await closeDb();
   });
 
-  await app.register(fastifySwagger, {
-    openapi: {
-      openapi: "3.1.0",
-      info: {
-        title: "lupa API",
-        description:
-          "API REST sobre dados extraídos do portal de transparência do TCE-TO " +
-          "(Tribunal de Contas do Estado do Tocantins). Cobre licitações e contratos, " +
-          "alimenta painéis de BI.",
-        version: "0.1.0",
-      },
-      servers: [{ url: config.API_URL ?? `http://${config.API_HOST}:${config.API_PORT}` }],
-      tags: [
-        { name: "health", description: "Liveness/readiness" },
-        { name: "meta", description: "Metadados de scraping" },
-        { name: "licitacoes", description: "Licitações do TCE-TO (~670 registros)" },
-        { name: "contratos", description: "Contratos do TCE-TO (~1.191 registros)" },
-        { name: "obras", description: "Obras e serviços de engenharia do TCE-TO (~14 registros)" },
-      ],
-    },
-  });
-
-  await app.register(scalarApiReference, {
-    routePrefix: "/docs",
-    configuration: {
-      theme: "default",
-      pageTitle: "lupa API",
-    },
-  });
+  await registerDocs(app);
 
   await app.register(healthRoutes);
   await app.register(metaRoutes, { prefix: "/api/meta" });
