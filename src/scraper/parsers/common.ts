@@ -39,6 +39,18 @@ export function parseBRDate(input: string | null | undefined): string | null {
   return ISO_DATE_VALID_RE.test(iso) ? iso : null;
 }
 
+const PERCENT_RE = /^(\d+)(?:[.,](\d{1,4}))?$/;
+
+export function parsePercentage(input: string | null | undefined): string | null {
+  if (!input) return null;
+  const cleaned = input.replace(/[%\s]/g, "");
+  const m = cleaned.match(PERCENT_RE);
+  if (!m) return null;
+  const intPart = m[1];
+  const fracPart = (m[2] ?? "").padEnd(2, "0").slice(0, 2);
+  return `${intPart}.${fracPart}`;
+}
+
 const TIME_RE = /^\s*([01]?\d|2[0-3]):([0-5]\d)(?::([0-5]\d))?\s*$/;
 
 export function parseBRTime(input: string | null | undefined): string | null {

@@ -9,6 +9,7 @@ import {
   parseBRDate,
   parseBRMoney,
   parseBRTime,
+  parsePercentage,
   parseSequencialFromNumero,
 } from "../../src/scraper/parsers/common";
 
@@ -106,6 +107,29 @@ describe("parseBRTime", () => {
     expect(parseBRTime("10:60:00")).toBe(null);
     expect(parseBRTime("foo")).toBe(null);
     expect(parseBRTime("")).toBe(null);
+  });
+});
+
+describe("parsePercentage", () => {
+  it("parses common percent strings to numeric(5,2) format", () => {
+    expect(parsePercentage("100,00 %")).toBe("100.00");
+    expect(parsePercentage("75.45%")).toBe("75.45");
+    expect(parsePercentage("54,71 %")).toBe("54.71");
+    expect(parsePercentage("0%")).toBe("0.00");
+    expect(parsePercentage("0,00 %")).toBe("0.00");
+  });
+  it("accepts integer-only percent without decimals", () => {
+    expect(parsePercentage("75%")).toBe("75.00");
+    expect(parsePercentage("100")).toBe("100.00");
+  });
+  it("truncates fractional beyond 2 digits", () => {
+    expect(parsePercentage("12,3456%")).toBe("12.34");
+  });
+  it("returns null for empty/garbage", () => {
+    expect(parsePercentage("")).toBe(null);
+    expect(parsePercentage(null)).toBe(null);
+    expect(parsePercentage(undefined)).toBe(null);
+    expect(parsePercentage("abc")).toBe(null);
   });
 });
 
