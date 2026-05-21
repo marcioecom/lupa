@@ -56,6 +56,11 @@ jobs:
           DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
         run: echo "Secret length is ${#DEPLOY_SECRET}"
 
+      - name: Compare HMAC
+        env:
+          DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
+        run: echo -n '{"image_tag":"test"}' | openssl dgst -sha256 -hmac "$DEPLOY_SECRET" -hex
+
       - name: Trigger deploy webhook
         env:
           DEPLOY_URL: https://deploy.marcio.run/hooks/lupa
