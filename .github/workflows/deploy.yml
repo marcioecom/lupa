@@ -51,6 +51,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Debug secret length
+        env:
+          DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
+        run: echo "Secret length is ${#DEPLOY_SECRET}"
+
       - name: Trigger deploy webhook
         env:
           DEPLOY_URL: https://deploy.marcio.run/hooks/lupa
