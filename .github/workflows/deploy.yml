@@ -81,8 +81,11 @@ jobs:
           payload=$(jq -nc --arg tag "$IMAGE_TAG" '{image_tag: $tag}')
           signature=$(echo -n "$payload" | openssl dgst -sha256 -hmac "$DEPLOY_SECRET" -hex | awk '{print "sha256="$NF}')
 
-          echo "POST $DEPLOY_URL"
-          curl -fsSL -X POST "$DEPLOY_URL" \
+          echo "Payload literal: |$payload|"
+          echo "Payload hex: $(echo -n "$payload" | xxd -p | tr -d '\n')"
+          echo "Signature: $signature"
+
+          curl -v --http1.1 -X POST "$DEPLOY_URL" \
             -H "Content-Type: application/json" \
             -H "X-Hub-Signature-256: $signature" \
-            -d "$payload"
+            --data-binary "$payload" 2>&1 || true
