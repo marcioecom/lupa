@@ -1,0 +1,67 @@
+# Template de workflow de deploy automatizado.
+# Copie para: .github/workflows/deploy.yml no repo do projeto.
+# Substitua:
+#   PROJETO  -> nome do projeto kebab-case (ex: lupa)
+#   DOMINIO  -> seu domínio completo (ex: lupa.marcio.run)
+#
+# Configurar secrets no repo do GitHub (Settings -> Secrets and variables -> Actions):
+#   DEPLOY_SECRET -> mesma string do PROJETO_DEPLOY_SECRET no .env do webhook
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+  deployments: write
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://lupa.marcio.run
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          platforms: linux/amd64
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/${{ github.repository }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Trigger deploy webhook
+        env:
+          DEPLOY_URL: https://deploy.marcio.run/hooks/lupa
+          DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          payload=$(jq -nc --arg tag "$IMAGE_TAG" '{image_tag: $tag}')
+          signature=$(echo -n "$payload" | openssl dgst -sha256 -hmac "$DEPLOY_SECRET" -hex | awk '{print "sha256="$NF}')
+
+          echo "POST $DEPLOY_URL"
+          curl -fsSL -X POST "$DEPLOY_URL" \
+            -H "Content-Type: application/json" \
+            -H "X-Hub-Signature-256: $signature" \
+            -d "$payload"
