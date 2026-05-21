@@ -61,6 +61,17 @@ jobs:
           DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
         run: echo -n '{"image_tag":"test"}' | openssl dgst -sha256 -hmac "$DEPLOY_SECRET" -hex
 
+      - name: Debug payload/signature
+        env:
+          DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          payload=$(jq -nc --arg tag "$IMAGE_TAG" '{image_tag: $tag}')
+          signature=$(echo -n "$payload" | openssl dgst -sha256 -hmac "$DEPLOY_SECRET" -hex | awk '{print "sha256="$NF}')
+          echo "Payload bytes: $(echo -n "$payload" | wc -c)"
+          echo "Payload hex: $(echo -n "$payload" | xxd -p | tr -d '\n')"
+          echo "Signature: $signature"
+
       - name: Trigger deploy webhook
         env:
           DEPLOY_URL: https://deploy.marcio.run/hooks/lupa
