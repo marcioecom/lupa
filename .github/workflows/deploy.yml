@@ -1,65 +1,85 @@
-# Template de workflow de deploy automatizado.
-# Copie para: .github/workflows/deploy.yml no repo do projeto.
-# Substitua:
-#   PROJETO  -> nome do projeto kebab-case (ex: lupa)
-#   DOMINIO  -> seu domínio completo (ex: lupa.marcio.run)
-#
-# Configurar secrets no repo do GitHub (Settings -> Secrets and variables -> Actions):
-#   DEPLOY_SECRET -> mesma string do PROJETO_DEPLOY_SECRET no .env do webhook
-
 name: Deploy
 
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
   packages: write
-  deployments: write
 
 concurrency:
   group: deploy-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  NAMESPACE: lupa
+
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://lupa.marcio.run
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - uses: docker/login-action@v3
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
           platforms: linux/amd64
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-            ghcr.io/${{ github.repository }}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Trigger deploy webhook
-        env:
-          DEPLOY_URL: https://deploy.marcio.run/hooks/lupa
-          DEPLOY_SECRET: ${{ secrets.DEPLOY_SECRET }}
-          IMAGE_TAG: ${{ github.sha }}
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_CLIENT_SECRET }}
+          tags: tag:ci
+
+      - name: Setup Kubeconfig
         run: |
-          payload=$(jq -nc --arg tag "$IMAGE_TAG" '{image_tag: $tag}')
-          signature=$(echo -n "$payload" | openssl dgst -sha256 -hmac "$DEPLOY_SECRET" -hex | awk '{print "sha256="$NF}')
-          curl -fsSL -X POST "$DEPLOY_URL" \
-            -H "Content-Type: application/json" \
-            -H "X-Hub-Signature-256: $signature" \
-            --data-binary "$payload"
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_DATA }}" > ~/.kube/config
+          chmod 600 ~/.kube/config
+
+      - name: Setup Kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: "v1.36.2"
+
+      - name: Deploy to K3s
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          kubectl apply -f k8s-manifests.yaml
+
+          # garante o Postgres pronto antes da app; senao o initContainer db-push
+          # fica repetindo ate o banco conectar (funciona, mas gera ruido no 1o deploy)
+          kubectl -n "$NAMESPACE" rollout status statefulset/lupa-postgres --timeout=180s
+
+          # imagem imutavel pelo SHA (init db-push + app juntos). com strategy Recreate
+          # o proprio set image ja dispara o rollout, sem precisar de scale 0/1.
+          kubectl -n "$NAMESPACE" set image deployment/lupa-app db-push="$IMAGE" app="$IMAGE"
+          kubectl -n "$NAMESPACE" rollout status deployment/lupa-app --timeout=180s
+          kubectl -n "$NAMESPACE" get pods -l app.kubernetes.io/name=lupa
