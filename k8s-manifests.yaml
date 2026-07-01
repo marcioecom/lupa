@@ -135,6 +135,8 @@ spec:
         app.kubernetes.io/name: lupa
         app.kubernetes.io/component: api
     spec:
+      imagePullSecrets:
+        - name: ghcr-pull
       initContainers:
         - name: db-push
           image: ghcr.io/marcioecom/lupa:latest
