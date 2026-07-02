@@ -3,7 +3,7 @@ import { eq, inArray, sql } from "drizzle-orm";
 import pino from "pino";
 import { config } from "../../config";
 import { type Db, getDb, schema } from "../../db/client";
-import { chunkArray } from "../concurrency";
+import { chunkArray, dedupeByKey } from "../concurrency";
 import { fetchHtml } from "../http-client";
 import { contentHash } from "../parsers/common";
 import {
@@ -158,16 +158,19 @@ async function applyToDb(
     return summary;
   }
 
-  const prepared: Prepared[] = items.map((item) => {
-    const merged = toRow(item);
-    const hash = contentHash({
-      ...merged,
-      valorIntervencaoCentavos: merged.valorIntervencaoCentavos?.toString() ?? null,
-      valorContratoCentavos: merged.valorContratoCentavos?.toString() ?? null,
-      valorAditivoCentavos: merged.valorAditivoCentavos?.toString() ?? null,
-    });
-    return { item, merged, hash };
-  });
+  const prepared: Prepared[] = dedupeByKey(
+    items.map((item) => {
+      const merged = toRow(item);
+      const hash = contentHash({
+        ...merged,
+        valorIntervencaoCentavos: merged.valorIntervencaoCentavos?.toString() ?? null,
+        valorContratoCentavos: merged.valorContratoCentavos?.toString() ?? null,
+        valorAditivoCentavos: merged.valorAditivoCentavos?.toString() ?? null,
+      });
+      return { item, merged, hash };
+    }),
+    (p) => p.merged.externalId,
+  );
 
   const existingRows = await db
     .select({

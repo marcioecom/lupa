@@ -3,7 +3,7 @@ import { eq, inArray, sql } from "drizzle-orm";
 import pino from "pino";
 import { config } from "../../config";
 import { type Db, getDb, schema } from "../../db/client";
-import { chunkArray, pMap } from "../concurrency";
+import { chunkArray, dedupeByKey, pMap } from "../concurrency";
 import { fetchHtml } from "../http-client";
 import { contentHash } from "../parsers/common";
 import { parseContratoDetail, type ContratoDetail } from "../parsers/contrato-detail";
@@ -198,11 +198,14 @@ async function applyToDb(
     return summary;
   }
 
-  const prepared: Prepared[] = enriched.map((item) => {
-    const merged = mergeListAndDetail(item.list, item.detail);
-    const hash = contentHash(buildHashInput(merged, item.detail));
-    return { item, merged, hash };
-  });
+  const prepared: Prepared[] = dedupeByKey(
+    enriched.map((item) => {
+      const merged = mergeListAndDetail(item.list, item.detail);
+      const hash = contentHash(buildHashInput(merged, item.detail));
+      return { item, merged, hash };
+    }),
+    (p) => p.merged.externalId,
+  );
 
   const existingRows = await db
     .select({

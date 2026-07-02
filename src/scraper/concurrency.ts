@@ -25,3 +25,16 @@ export function chunkArray<T>(items: T[], size: number): T[][] {
   for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
   return out;
 }
+
+/**
+ * Deduplicate items by a string key, keeping the last occurrence of each key
+ * while preserving the order of first appearance. Used before an
+ * `INSERT ... ON CONFLICT DO UPDATE` upsert: Postgres rejects a single command
+ * that targets the same conflict key twice ("cannot affect row a second time"),
+ * so the scraped batch must be unique by its conflict key first.
+ */
+export function dedupeByKey<T>(items: T[], key: (item: T) => string): T[] {
+  const map = new Map<string, T>();
+  for (const item of items) map.set(key(item), item);
+  return [...map.values()];
+}
